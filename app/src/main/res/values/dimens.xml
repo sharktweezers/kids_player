@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="control_height">75dp</dimen>
+    <dimen name="control_btn_width">60dp</dimen>
+    <dimen name="control_btn_height">60dp</dimen>
+    <dimen name="item_control_margin">5dp</dimen>
+    <dimen name="item_vertical_margin">5dp</dimen>
+    <dimen name="item_horizontal_margin">5dp</dimen>
+</resources>
