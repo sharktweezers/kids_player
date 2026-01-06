@@ -2,7 +2,6 @@ package com.dsokolov.kidsplayer.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -21,12 +20,8 @@ import com.dsokolov.kidsplayer.ui.theme.CONTROLS_ITEM_SIDE
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_PADDING
 
 @Composable
-fun BottomPanel(innerPadding: PaddingValues) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding),
-    ) {
+fun BottomPanel() {
+    Box(modifier = Modifier.fillMaxSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -73,5 +68,5 @@ fun BottomPanel(innerPadding: PaddingValues) {
 @Preview
 @Composable
 private fun BottomPanelPreview() {
-    BottomPanel(PaddingValues())
+    BottomPanel()
 }
