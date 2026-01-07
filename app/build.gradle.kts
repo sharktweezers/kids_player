@@ -39,6 +39,7 @@ android {
 
 dependencies {
     implementation(project(":injector"))
+    implementation(project(":utils"))
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.core.ktx)

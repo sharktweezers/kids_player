@@ -13,6 +13,7 @@ foundationLayout = "1.10.0"
 dagger = "2.57.2"
 appcompat = "1.7.1"
 material = "1.13.0"
+fragment = "1.8.9"
 minSdk = "29"
 targetSdk = "36"
 compileSdk = "36"
@@ -38,6 +39,8 @@ dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" 
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

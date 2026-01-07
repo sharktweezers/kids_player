@@ -1,8 +1,8 @@
 package com.dsokolov.kidsplayer.di
 
-import android.content.Context
-import com.dsokolov.kidsplayer.injector.Deps
+import com.dsokolov.kidsplayer.KidsPlayerApplication
+import com.dsokolov.kidsplayer.injector.ComponentDependencies
 
-interface AppDeps : Deps {
-    val context: Context
+interface AppDeps : ComponentDependencies {
+    val application: KidsPlayerApplication
 }

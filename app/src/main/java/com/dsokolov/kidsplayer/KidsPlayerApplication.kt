@@ -1,19 +1,21 @@
 package com.dsokolov.kidsplayer
 
 import android.app.Application
-import android.content.Context
-import com.dsokolov.kidsplayer.di.AppComponent
 import com.dsokolov.kidsplayer.di.AppDeps
-import com.dsokolov.kidsplayer.di.DaggerAppComponent
+import com.dsokolov.kidsplayer.di.Di
 
 class KidsPlayerApplication : Application() {
-    private lateinit var appComponent: AppComponent
-
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.builder().appsDependencies(object: AppDeps {
-            override val context = this@KidsPlayerApplication
+        initDi()
+    }
 
-        }).build()
+    private fun initDi() {
+        val appDependencies = object : AppDeps {
+            override val application: KidsPlayerApplication
+                get() = this@KidsPlayerApplication
+
+        }
+        Di.init(appDependencies)
     }
 }

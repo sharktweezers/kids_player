@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "KidsPlayer"
 include(":app")
 include(":injector")
+include(":utils")

@@ -1,17 +1,19 @@
 package com.dsokolov.kidsplayer.di
 
-import dagger.BindsInstance
+import com.dsokolov.kidsplayer.PlayerActivity
+import com.dsokolov.kidsplayer.injector.di.ViewModelFactoryModule
 import dagger.Component
+import javax.inject.Singleton
 
 @Component(
-    modules = [AppModule::class, ViewModelModule::class],
-    dependencies = [AppDeps::class]
+    modules = [
+        ViewModelFactoryModule::class
+    ],
+    dependencies = [AppDeps::class],
 )
-interface AppComponent {
-    @Component.Builder
-    interface Builder {
-        fun build(): AppComponent
 
-        fun appsDependencies(deps: AppDeps): Builder
-    }
+@Singleton
+interface AppComponent : AppApi {
+    fun inject(componentManager: Di.ComponentManager)
+    fun inject(playerActivity: PlayerActivity)
 }
