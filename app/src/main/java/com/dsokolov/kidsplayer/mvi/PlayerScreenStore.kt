@@ -1,13 +1,296 @@
 package com.dsokolov.kidsplayer.mvi
 
+import com.dsokolov.kidsplayer.R
+import com.dsokolov.kidsplayer.presentation.PlayableItem
 import com.dsokolov.kidsplayer.presentation.PlayerScreenState
 
 class PlayerScreenStore() {
     fun getInitialPlayerScreenState(isVerticalScreenOrientation: Boolean): PlayerScreenState {
         return PlayerScreenState(
-            playableItems = emptyList(),
+            playableItems = createPlayableItems(),
             currentItemId = null,
             isVerticalScreenOrientation = isVerticalScreenOrientation,
+        )
+    }
+
+    private fun createPlayableItems(): List<PlayableItem> {
+        return listOf(
+            PlayableItem(
+                id = 0,
+                markAsPlayed = false,
+                iconId = R.drawable.s0,
+                audioId = R.raw.aisberg_v_okeane,
+            ),
+            PlayableItem(
+                id = 1,
+                markAsPlayed = false,
+                iconId = R.drawable.s1,
+                audioId = R.raw.belye_snezhinki,
+            ),
+            PlayableItem(
+                id = 2,
+                markAsPlayed = false,
+                iconId = R.drawable.s2,
+                audioId = R.raw.buratino,
+            ),
+            PlayableItem(
+                id = 3,
+                markAsPlayed = false,
+                iconId = R.drawable.s3,
+                audioId = R.raw.chelovek_sobake_drug,
+            ),
+            PlayableItem(
+                id = 4,
+                markAsPlayed = false,
+                iconId = R.drawable.s4,
+                audioId = R.raw.daleko_daleko,
+            ),
+            PlayableItem(
+                id = 5,
+                markAsPlayed = false,
+                iconId = R.drawable.s5,
+                audioId = R.raw.ded_moroz_pogodi,
+            ),
+            PlayableItem(
+                id = 6,
+                markAsPlayed = false,
+                iconId = R.drawable.s6,
+                audioId = R.raw.duet_glupogo_korolya_i_prekrasnoy_princesi,
+            ),
+            PlayableItem(
+                id = 7,
+                markAsPlayed = false,
+                iconId = R.drawable.s7,
+                audioId = R.raw.esli_dobryy_ty,
+            ),
+            PlayableItem(
+                id = 8,
+                markAsPlayed = false,
+                iconId = R.drawable.s8,
+                audioId = R.raw.gimn_neznayki_i_ego_druzey,
+            ),
+            PlayableItem(
+                id = 9,
+                markAsPlayed = false,
+                iconId = R.drawable.s9,
+                audioId = R.raw.goluboi_vagon,
+            ),
+            PlayableItem(
+                id = 10,
+                markAsPlayed = false,
+                iconId = R.drawable.s10,
+                audioId = R.raw.kaby_ne_bylo_zimy,
+            ),
+            PlayableItem(
+                id = 11,
+                markAsPlayed = false,
+                iconId = R.drawable.s11,
+                audioId = R.raw.karusel,
+            ),
+            PlayableItem(
+                id = 12,
+                markAsPlayed = false,
+                iconId = R.drawable.s12,
+                audioId = R.raw.kolybelnaja_medvedicy,
+            ),
+            PlayableItem(
+                id = 13,
+                markAsPlayed = false,
+                iconId = R.drawable.s13,
+                audioId = R.raw.kot_leopold_me_pereshivem,
+            ),
+            PlayableItem(
+                id = 14,
+                markAsPlayed = false,
+                iconId = R.drawable.s14,
+                audioId = R.raw.kot_leopold_na_krutom_berezhku,
+            ),
+            PlayableItem(
+                id = 15,
+                markAsPlayed = false,
+                iconId = R.drawable.s15,
+                audioId = R.raw.kot_leopold_vse_na_svete,
+            ),
+            PlayableItem(
+                id = 16,
+                markAsPlayed = false,
+                iconId = R.drawable.s16,
+                audioId = R.raw.me_v_gorod_izumrudnii,
+            ),
+            PlayableItem(
+                id = 17,
+                markAsPlayed = false,
+                iconId = R.drawable.s17,
+                audioId = R.raw.my_edem_v_dalekie_kraya,
+            ),
+            PlayableItem(
+                id = 18,
+                markAsPlayed = false,
+                iconId = R.drawable.s18,
+                audioId = R.raw.nastojashii_drug,
+            ),
+            PlayableItem(
+                id = 19,
+                markAsPlayed = false,
+                iconId = R.drawable.s19,
+                audioId = R.raw.nichego_na_svete_luchshe_netu,
+            ),
+            PlayableItem(
+                id = 20,
+                markAsPlayed = false,
+                iconId = R.drawable.s20,
+                audioId = R.raw.oranzhevaya_pesnya,
+            ),
+            PlayableItem(
+                id = 21,
+                markAsPlayed = false,
+                iconId = R.drawable.s21,
+                audioId = R.raw.papa_mozhet,
+            ),
+            PlayableItem(
+                id = 22,
+                markAsPlayed = false,
+                iconId = R.drawable.s22,
+                audioId = R.raw.pesenka_cheburashki,
+            ),
+            PlayableItem(
+                id = 23,
+                markAsPlayed = false,
+                iconId = R.drawable.s23,
+                audioId = R.raw.pesenka_deda_moroza,
+            ),
+            PlayableItem(
+                id = 24,
+                markAsPlayed = false,
+                iconId = R.drawable.s24,
+                audioId = R.raw.pesenka_krokodila_geny,
+            ),
+            PlayableItem(
+                id = 25,
+                markAsPlayed = false,
+                iconId = R.drawable.s25,
+                audioId = R.raw.pesenka_mamontyonka,
+            ),
+            PlayableItem(
+                id = 26,
+                markAsPlayed = false,
+                iconId = R.drawable.s26,
+                audioId = R.raw.pesenka_o_lete,
+            ),
+            PlayableItem(
+                id = 27,
+                markAsPlayed = false,
+                iconId = R.drawable.s27,
+                audioId = R.raw.pesenka_razboynikov,
+            ),
+            PlayableItem(
+                id = 28,
+                markAsPlayed = false,
+                iconId = R.drawable.s28,
+                audioId = R.raw.pesnja_krasnoi_shapochki,
+            ),
+            PlayableItem(
+                id = 29,
+                markAsPlayed = false,
+                iconId = R.drawable.s29,
+                audioId = R.raw.pesnya_ohrany,
+            ),
+            PlayableItem(
+                id = 30,
+                markAsPlayed = false,
+                iconId = R.drawable.s30,
+                audioId = R.raw.plastilinovaya_vorona,
+            ),
+            PlayableItem(
+                id = 31,
+                markAsPlayed = false,
+                iconId = R.drawable.s31,
+                audioId = R.raw.po_doroge_s_oblakami,
+            ),
+            PlayableItem(
+                id = 32,
+                markAsPlayed = false,
+                iconId = R.drawable.s32,
+                audioId = R.raw.skazki_guljajut_po_svetu,
+            ),
+            PlayableItem(
+                id = 33,
+                markAsPlayed = false,
+                iconId = R.drawable.s33,
+                audioId = R.raw.spi_moya_radost_usni,
+            ),
+            PlayableItem(
+                id = 34,
+                markAsPlayed = false,
+                iconId = R.drawable.s34,
+                audioId = R.raw.syurpriz,
+            ),
+            PlayableItem(
+                id = 35,
+                markAsPlayed = false,
+                iconId = R.drawable.s35,
+                audioId = R.raw.tanec_malenkih_utyat,
+            ),
+            PlayableItem(
+                id = 36,
+                markAsPlayed = false,
+                iconId = R.drawable.s36,
+                audioId = R.raw.tarakana_i_sverchok,
+            ),
+            PlayableItem(
+                id = 37,
+                markAsPlayed = false,
+                iconId = R.drawable.s37,
+                audioId = R.raw.top_top_topaet_malysh,
+            ),
+            PlayableItem(
+                id = 38,
+                markAsPlayed = false,
+                iconId = R.drawable.s38,
+                audioId = R.raw.v_gostjah_u_skazki,
+            ),
+            PlayableItem(
+                id = 39,
+                markAsPlayed = false,
+                iconId = R.drawable.s39,
+                audioId = R.raw.v_kagdom_malenkom_rebenke,
+            ),
+            PlayableItem(
+                id = 40,
+                markAsPlayed = false,
+                iconId = R.drawable.s40,
+                audioId = R.raw.v_lesu_rodilas_elochka,
+            ),
+            PlayableItem(
+                id = 41,
+                markAsPlayed = false,
+                iconId = R.drawable.s41,
+                audioId = R.raw.vinovataiatuchka,
+            ),
+            PlayableItem(
+                id = 42,
+                markAsPlayed = false,
+                iconId = R.drawable.s42,
+                audioId = R.raw.zdravstvuy_detstvo,
+            ),
+            PlayableItem(
+                id = 43,
+                markAsPlayed = false,
+                iconId = R.drawable.s43,
+                audioId = R.raw.oblaka,
+            ),
+            PlayableItem(
+                id = 44,
+                markAsPlayed = false,
+                iconId = R.drawable.s44,
+                audioId = R.raw.ot_ulybki_hmuryj_den_svetlej,
+            ),
+            PlayableItem(
+                id = 45,
+                markAsPlayed = false,
+                iconId = R.drawable.s45,
+                audioId = R.raw.pesenka_funtika,
+            ),
         )
     }
 }

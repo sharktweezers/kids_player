@@ -1,5 +1,6 @@
 package com.dsokolov.kidsplayer
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +16,9 @@ class PlayerActivity : ComponentActivity() {
     internal lateinit var viewModelFactory: PlayerViewModel.Factory
 
     private val vm: PlayerViewModel by viewModelsWithRuntimeArgs {
-        viewModelFactory.create(false)
+        viewModelFactory.create(
+            resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,5 +29,12 @@ class PlayerActivity : ComponentActivity() {
         setContent {
             PlayerScene()
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        vm.onConfigurationChanged(
+            newConfig.orientation == Configuration.ORIENTATION_PORTRAIT,
+        )
     }
 }
