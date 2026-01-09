@@ -1,7 +1,7 @@
 package com.dsokolov.kidsplayer.presentation
 
-import androidx.lifecycle.ViewModel
 import com.dsokolov.kidsplayer.mvi.PlayerScreenStore
+import com.dsokolov.kidsplayer.mvi_core.BaseMviViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class PlayerViewModel @AssistedInject constructor(
     @Assisted isVerticalScreenOrientation: Boolean,
-) : ViewModel() {
+) : BaseMviViewModel() {
     private val playerScreenStore = PlayerScreenStore()
 
     private val mutableState = MutableStateFlow(

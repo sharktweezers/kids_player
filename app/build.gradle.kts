@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation(project(":injector"))
     implementation(project(":utils"))
+    implementation(project(":mvi_core"))
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.core.ktx)
