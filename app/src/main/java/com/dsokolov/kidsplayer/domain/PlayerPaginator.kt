@@ -5,16 +5,19 @@ import kotlin.math.max
 import kotlin.math.min
 
 object PlayerPaginator {
-    fun getPage(): PlayerPage {
+    fun getPage(isVerticalScreenOrientation: Boolean): PlayerPage {
         val items = mutableListOf<PlayableItem>()
 
         val startIndex = max(0, 0)
-        val endIndex = min(9, PlayableItemsStore.items.size)
+        val endIndex = min(12, PlayableItemsStore.items.size)
 
-        for (i in startIndex until endIndex) {
+        for (i in 0 until endIndex) {
             items.add(PlayableItemsStore.items[i])
         }
 
-        return PlayerPage(items)
+        return PlayerPage(
+            items = items,
+            columnsCount = if (isVerticalScreenOrientation) 3 else 6
+        )
     }
 }

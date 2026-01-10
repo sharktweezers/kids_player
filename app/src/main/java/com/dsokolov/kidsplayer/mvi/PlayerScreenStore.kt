@@ -6,7 +6,7 @@ import com.dsokolov.kidsplayer.presentation.PlayerScreenState
 class PlayerScreenStore() {
     fun getInitialPlayerScreenState(isVerticalScreenOrientation: Boolean): PlayerScreenState {
         return PlayerScreenState(
-            page = PlayerPaginator.getPage(),
+            page = PlayerPaginator.getPage(isVerticalScreenOrientation),
             currentItemId = null,
             isVerticalScreenOrientation = isVerticalScreenOrientation,
         )
