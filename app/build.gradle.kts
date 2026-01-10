@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // dagger2
     implementation(libs.dagger)

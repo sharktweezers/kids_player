@@ -27,7 +27,7 @@ class PlayerActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            PlayerScene()
+            PlayerScene(vm)
         }
     }
 
