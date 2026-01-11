@@ -1,6 +1,7 @@
 package com.dsokolov.kidsplayer.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,6 +25,8 @@ import com.dsokolov.kidsplayer.R
 import com.dsokolov.kidsplayer.domain.PlayerPage
 import com.dsokolov.kidsplayer.presentation.PlayableItem
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_PADDING
+import com.dsokolov.kidsplayer.ui.theme.ImageBorder
+import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 
 @Composable
 fun PageContent(page: PlayerPage) {
@@ -48,6 +51,7 @@ fun PageContent(page: PlayerPage) {
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .clip(CircleShape)
+                        .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape)
                 )
             }
         }
