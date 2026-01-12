@@ -29,7 +29,7 @@ internal class StoreImpl<in Event, out State, out SideEffect, out Command>(
 
     override suspend fun onEvent(event: Event) {
         stateSourceStarted.join()
-        stateMachine.onEvent(event)
+        stateMachine.onMessage(event)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -46,7 +46,7 @@ internal class StoreImpl<in Event, out State, out SideEffect, out Command>(
 
         coroutineScope.launch(coroutineDispatcher + errorHandler) {
 
-            /*if (transitionListener != null) {
+            if (transitionListener != null) {
                 stateMachine.getTransitionSource()
                         .onSubscription {
                             transitionSourceStarted.complete(Unit)
@@ -55,17 +55,16 @@ internal class StoreImpl<in Event, out State, out SideEffect, out Command>(
                         .launchIn(coroutineScope)
             } else {
                 transitionSourceStarted.complete(Unit)
-            }*/
+            }
 
             commandHandler.getEventSource()
                     .onStart {
                         commandMessageSourceStarted.complete(Unit)
                     }
-                    .onEach(stateMachine::onEvent)
+                    .onEach(stateMachine::onMessage)
                     .launchIn(this)
 
-            // TODO дописать stateMachine
-            /*stateMachine.getSideEffectSource()
+            stateMachine.getSideEffectSource()
                     .onSubscription {
                         sideEffectSourceStarted.complete(Unit)
                     }
@@ -94,7 +93,7 @@ internal class StoreImpl<in Event, out State, out SideEffect, out Command>(
                     .launchIn(this)
 
             stateSourceStarted.join()
-            stateMachine.emitInitialCommands(initialCommands)*/
+            stateMachine.emitInitialCommands(initialCommands)
         }
     }
 
