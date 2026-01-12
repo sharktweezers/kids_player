@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,34 +29,56 @@ import com.dsokolov.kidsplayer.R
 import com.dsokolov.kidsplayer.domain.PlayerPage
 import com.dsokolov.kidsplayer.presentation.PlayableItem
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_PADDING
+import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_2
 import com.dsokolov.kidsplayer.ui.theme.ImageBorder
 import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 
 @Composable
-fun PageContent(page: PlayerPage) {
-    Box(
+fun PageContent(
+    pagesCount: Int,
+    page: PlayerPage,
+    onPageChange: (Int) -> Unit,
+) {
+    val pagerState = rememberPagerState(
+        initialPage = page.pageNumber,
+        pageCount = { pagesCount }
+    )
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .collect { page ->
+                onPageChange(page)
+            }
+    }
+
+    HorizontalPager(
+        state = pagerState,
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = CONTROLS_PADDING.dp),
-        contentAlignment = Alignment.Center
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(page.columnsCount),
-            modifier = Modifier.wrapContentSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
         ) {
-            items(page.items) { item ->
-                Image(
-                    painter = painterResource(id = item.iconId),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .clip(CircleShape)
-                        .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape)
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(page.columnsCount),
+                modifier = Modifier.wrapContentSize(),
+                verticalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
+                horizontalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
+            ) {
+                items(page.items) { item ->
+                    Image(
+                        painter = painterResource(id = item.iconId),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clip(CircleShape)
+                            .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape)
+                    )
+                }
             }
         }
     }
@@ -62,7 +88,6 @@ fun PageContent(page: PlayerPage) {
 @Composable
 private fun PreviewPageContent() {
     val page = PlayerPage(
-        columnsCount = 3,
         items = listOf(
             PlayableItem(
                 id = 0,
@@ -136,7 +161,13 @@ private fun PreviewPageContent() {
                 iconId = R.drawable.s11,
                 audioId = R.raw.karusel,
             ),
-        )
+        ),
+        columnsCount = 3,
+        pageNumber = 0,
     )
-    PageContent(page)
+    PageContent(
+        pagesCount = 1,
+        page = page,
+        onPageChange = {},
+    )
 }

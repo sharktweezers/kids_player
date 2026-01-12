@@ -1,23 +1,38 @@
 package com.dsokolov.kidsplayer.domain
 
 import com.dsokolov.kidsplayer.presentation.PlayableItem
-import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.ceil
 
 object PlayerPaginator {
-    fun getPage(isVerticalScreenOrientation: Boolean): PlayerPage {
+    private const val START_POSITION = 0
+    private const val COLUMN_COUNT_IN_PORTRAIT = 3
+    private const val COLUMN_COUNT_IN_LANDSCAPE = 6
+    private const val PAGE_ITEMS = 12
+
+    fun getPageContent(
+        pageNumber: Int,
+        isVerticalScreenOrientation: Boolean
+    ): PlayerPage {
         val items = mutableListOf<PlayableItem>()
 
-        val startIndex = max(0, 0)
-        val endIndex = min(12, PlayableItemsStore.items.size)
+        val startIndex = pageNumber * PAGE_ITEMS
+        val endIndex = min(startIndex + PAGE_ITEMS, PlayableItemsStore.items.size)
 
-        for (i in 0 until endIndex) {
+        for (i in startIndex until endIndex) {
             items.add(PlayableItemsStore.items[i])
         }
 
         return PlayerPage(
             items = items,
-            columnsCount = if (isVerticalScreenOrientation) 3 else 6
+            columnsCount = if (isVerticalScreenOrientation) {
+                COLUMN_COUNT_IN_PORTRAIT
+            } else {
+                COLUMN_COUNT_IN_LANDSCAPE
+            },
+            pageNumber = pageNumber,
         )
     }
+
+    fun getPagesCount() = ceil(PlayableItemsStore.items.size.toFloat() / PAGE_ITEMS).toInt()
 }

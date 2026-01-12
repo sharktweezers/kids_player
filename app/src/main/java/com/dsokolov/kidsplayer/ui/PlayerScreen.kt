@@ -38,7 +38,11 @@ fun PlayerScene(vm: PlayerViewModel) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
-                PageContent(state.page)
+                PageContent(
+                    pagesCount = state.pagesCount,
+                    page = state.pageContent,
+                    onPageChange = vm::onPageChanged
+                )
                 BottomPanel()
             }
         }

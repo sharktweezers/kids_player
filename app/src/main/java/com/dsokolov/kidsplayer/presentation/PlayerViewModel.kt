@@ -1,5 +1,6 @@
 package com.dsokolov.kidsplayer.presentation
 
+import com.dsokolov.kidsplayer.domain.PlayerPaginator
 import com.dsokolov.kidsplayer.mvi.PlayerScreenStore
 import com.dsokolov.kidsplayer.mvi_core.BaseMviViewModel
 import dagger.assisted.Assisted
@@ -23,6 +24,17 @@ class PlayerViewModel @AssistedInject constructor(
     fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) {
         mutableState.update {
             it.copy(isVerticalScreenOrientation = isVerticalScreenOrientation)
+        }
+    }
+
+    fun onPageChanged(pageNumber: Int) {
+        mutableState.update {
+            it.copy(
+                pageContent = PlayerPaginator.getPageContent(
+                    pageNumber = pageNumber,
+                    isVerticalScreenOrientation = it.isVerticalScreenOrientation
+                )
+            )
         }
     }
 
