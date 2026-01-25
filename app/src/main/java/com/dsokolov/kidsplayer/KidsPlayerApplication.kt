@@ -3,6 +3,7 @@ package com.dsokolov.kidsplayer
 import android.app.Application
 import com.dsokolov.kidsplayer.di.AppDeps
 import com.dsokolov.kidsplayer.di.Di
+import com.dsokolov.kidsplayer.injector.di.ViewModelFactoryHolder
 
 class KidsPlayerApplication : Application() {
     override fun onCreate() {
@@ -17,5 +18,6 @@ class KidsPlayerApplication : Application() {
 
         }
         Di.init(appDependencies)
+        Di.getComponent().inject(ViewModelFactoryHolder.store)
     }
 }

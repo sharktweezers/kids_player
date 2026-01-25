@@ -1,13 +1,14 @@
 package com.dsokolov.kidsplayer.di
 
-import com.dsokolov.kidsplayer.injector.di.ViewModelFactoryModule
+import com.dsokolov.kidsplayer.injector.di.ViewModelFactoryStore
 import com.dsokolov.kidsplayer.presentation.PlayerViewModel
 import dagger.Component
 import javax.inject.Singleton
 
 @Component(
     modules = [
-        ViewModelFactoryModule::class
+        AppModule::class,
+        BindsViewModelModule::class,
     ],
     dependencies = [AppDeps::class],
 )
@@ -15,6 +16,8 @@ import javax.inject.Singleton
 @Singleton
 interface AppComponent : AppApi {
     fun inject(componentManager: Di.ComponentManager)
+
+    fun inject(componentManager: ViewModelFactoryStore)
 
     fun getPlayerViewModelFactory(): PlayerViewModel.Factory
 }

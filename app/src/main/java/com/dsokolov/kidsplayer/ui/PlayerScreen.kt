@@ -30,6 +30,7 @@ fun PlayerScene() {
             configuration.orientation == Configuration.ORIENTATION_PORTRAIT
         )
     }
+    // val vm: PlayerViewModel = viewModel(factory = ViewModelFactoryHolder.factory()) - без Assisted параметров в конструкторе
 
     vm.onConfigurationChanged(
         isVerticalScreenOrientation = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
