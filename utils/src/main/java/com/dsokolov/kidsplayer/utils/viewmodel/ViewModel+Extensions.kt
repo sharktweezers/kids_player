@@ -2,6 +2,7 @@ package com.dsokolov.kidsplayer.utils.viewmodel
 
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.fragment.app.viewModels
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 /**
  * Обертка над [androidx.fragment.app.viewModels],
@@ -109,4 +111,14 @@ public inline fun <reified T : ViewModel> ComponentActivity.viewModelsWithRuntim
     )
 }
 
-
+@Composable
+inline fun <reified VM : ViewModel> assistedViewModel(
+    crossinline creator: () -> VM,
+): VM = viewModel(
+    factory = object : ViewModelProvider.Factory {
+        override fun <VM : ViewModel> create(modelClass: Class<VM>): VM {
+            @Suppress("UNCHECKED_CAST")
+            return creator.invoke() as VM
+        }
+    }
+)

@@ -67,7 +67,10 @@ fun PageContent(
                 verticalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
                 horizontalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
             ) {
-                items(page.items) { item ->
+                items(
+                    items = page.items,
+                    key = { item -> item.id }
+                ) { item ->
                     Image(
                         painter = painterResource(id = item.iconId),
                         contentDescription = null,

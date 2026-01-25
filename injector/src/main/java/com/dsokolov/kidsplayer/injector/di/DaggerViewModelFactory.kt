@@ -2,10 +2,8 @@ package com.dsokolov.kidsplayer.injector.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dagger.MapKey
 import javax.inject.Inject
 import javax.inject.Provider
-import kotlin.reflect.KClass
 
 /**
  * Фабрика, нужная для создания [ViewModelProvider.Factory] любой [ViewModel], у которой @Inject constructor
@@ -36,24 +34,3 @@ class DaggerViewModelFactory @Inject constructor(
         }
     }
 }
-
-/**
- * Использовать для всех ViewModel у которых @Inject constructor
- *
- * Пример использования:
- *  @Module
- *  abstract class SomeModule {
- *      @Binds
- *      @IntoMap
- *      @ViewModelKey(SomeViewModel::class)
- *      abstract fun bindSomeViewModel(viewModel: SomeViewModel): ViewModel
- *   }
- *
- */
-@Target(
-    AnnotationTarget.FUNCTION,
-    AnnotationTarget.PROPERTY_GETTER,
-    AnnotationTarget.PROPERTY_SETTER,
-)
-@MapKey
-annotation class ViewModelKey(val value: KClass<out ViewModel>)

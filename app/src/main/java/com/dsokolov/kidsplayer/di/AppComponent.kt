@@ -1,7 +1,7 @@
 package com.dsokolov.kidsplayer.di
 
-import com.dsokolov.kidsplayer.PlayerActivity
 import com.dsokolov.kidsplayer.injector.di.ViewModelFactoryModule
+import com.dsokolov.kidsplayer.presentation.PlayerViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -15,5 +15,6 @@ import javax.inject.Singleton
 @Singleton
 interface AppComponent : AppApi {
     fun inject(componentManager: Di.ComponentManager)
-    fun inject(playerActivity: PlayerActivity)
+
+    fun getPlayerViewModelFactory(): PlayerViewModel.Factory
 }
