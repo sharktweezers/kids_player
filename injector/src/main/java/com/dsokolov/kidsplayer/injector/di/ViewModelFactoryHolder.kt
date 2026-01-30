@@ -9,11 +9,14 @@ object ViewModelFactoryHolder {
 }
 
 class ViewModelFactoryStore internal constructor() {
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Volatile
+    internal var viewModelFactory: ViewModelProvider.Factory? = null
         private set
 
     @Inject
     fun onInject(factory: DaggerViewModelFactory) {
-        viewModelFactory = factory
+        if (viewModelFactory == null) {
+            viewModelFactory = factory
+        }
     }
 }
