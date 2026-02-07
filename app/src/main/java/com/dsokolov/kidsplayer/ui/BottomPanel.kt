@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -17,7 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.dsokolov.kidsplayer.R
 import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_1
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_ITEM_SIDE
-import com.dsokolov.kidsplayer.ui.theme.CONTROLS_PADDING
+import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
+import com.dsokolov.kidsplayer.ui.theme.CONTROLS_Y_OFF_SET
 
 @Composable
 fun BottomPanel() {
@@ -25,8 +27,9 @@ fun BottomPanel() {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(CONTROLS_PADDING.dp)
+                .height(CONTROLS_HEIGHT.dp)
                 .align(Alignment.BottomCenter)
+                .offset(y = CONTROLS_Y_OFF_SET.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.repeat_all),

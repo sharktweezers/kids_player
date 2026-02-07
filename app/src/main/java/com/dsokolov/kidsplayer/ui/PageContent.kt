@@ -17,7 +17,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.dsokolov.kidsplayer.R
 import com.dsokolov.kidsplayer.domain.PlayerPage
 import com.dsokolov.kidsplayer.presentation.PlayableItem
-import com.dsokolov.kidsplayer.ui.theme.CONTROLS_PADDING
+import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_2
 import com.dsokolov.kidsplayer.ui.theme.ImageBorder
 import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
@@ -44,18 +43,19 @@ fun PageContent(
         pageCount = { pagesCount }
     )
 
-    LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }
-            .collect { page ->
-                onPageChange(page)
-            }
+    LaunchedEffect(pagerState.currentPage) {
+        onPageChange(pagerState.currentPage)
     }
 
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = CONTROLS_PADDING.dp),
+            .padding(
+                bottom = CONTROLS_HEIGHT.dp,
+                start = BORDER_GRID_2.dp,
+                end = BORDER_GRID_2.dp,
+            ),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

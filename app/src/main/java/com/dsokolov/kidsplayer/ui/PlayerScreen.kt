@@ -12,12 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dsokolov.kidsplayer.R
 import com.dsokolov.kidsplayer.di.Di
 import com.dsokolov.kidsplayer.presentation.PlayerViewModel
-import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_2
 import com.dsokolov.kidsplayer.ui.theme.KidsPlayerTheme
 import com.dsokolov.kidsplayer.utils.viewmodel.assistedViewModel
 
@@ -38,9 +36,7 @@ fun PlayerScene() {
 
     KidsPlayerTheme {
         Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(BORDER_GRID_2.dp)
+            modifier = Modifier.fillMaxSize()
         ) { innerPadding ->
             val state by vm.state.collectAsStateWithLifecycle()
 
