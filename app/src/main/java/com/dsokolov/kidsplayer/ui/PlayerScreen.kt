@@ -53,7 +53,8 @@ fun PlayerScene() {
                 )
                 PageContent(
                     pagesCount = state.pagesCount,
-                    page = state.pageContent,
+                    currentPage = state.currentPage,
+                    pages = state.pages,
                     onPageChange = vm::onPageChanged
                 )
                 BottomPanel()

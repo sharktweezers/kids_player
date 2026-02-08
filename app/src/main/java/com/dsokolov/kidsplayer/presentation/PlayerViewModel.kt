@@ -23,19 +23,15 @@ class PlayerViewModel @AssistedInject constructor(
 
     fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) {
         mutableState.update {
-            it.copy(isVerticalScreenOrientation = isVerticalScreenOrientation)
+            it.copy(
+                isVerticalScreenOrientation = isVerticalScreenOrientation,
+                playerPages = PlayerPaginator.getPages(isVerticalScreenOrientation)
+            )
         }
     }
 
     fun onPageChanged(pageNumber: Int) {
-        mutableState.update {
-            it.copy(
-                pageContent = PlayerPaginator.getPageContent(
-                    pageNumber = pageNumber,
-                    isVerticalScreenOrientation = it.isVerticalScreenOrientation
-                )
-            )
-        }
+        mutableState.update { it.copy(currentPage = pageNumber,) }
     }
 
     @AssistedFactory

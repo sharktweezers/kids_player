@@ -35,11 +35,12 @@ import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 @Composable
 fun PageContent(
     pagesCount: Int,
-    page: PlayerPage,
+    currentPage: Int,
+    pages: List<PlayerPage>,
     onPageChange: (Int) -> Unit,
 ) {
     val pagerState = rememberPagerState(
-        initialPage = page.pageNumber,
+        initialPage = currentPage,
         pageCount = { pagesCount }
     )
 
@@ -56,32 +57,37 @@ fun PageContent(
                 start = BORDER_GRID_2.dp,
                 end = BORDER_GRID_2.dp,
             ),
+    ) { pageNumber: Int ->
+        Page(pages[pageNumber])
+    }
+}
+
+@Composable
+private fun Page(page: PlayerPage) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(page.columnsCount),
+            modifier = Modifier.wrapContentSize(),
+            verticalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
+            horizontalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(page.columnsCount),
-                modifier = Modifier.wrapContentSize(),
-                verticalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
-                horizontalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
-            ) {
-                items(
-                    items = page.items,
-                    key = { item -> item.id }
-                ) { item ->
-                    Image(
-                        painter = painterResource(id = item.iconId),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clip(CircleShape)
-                            .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape)
-                    )
-                }
+            items(
+                items = page.items,
+                key = { item -> item.id }
+            ) { item ->
+                Image(
+                    painter = painterResource(id = item.iconId),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(CircleShape)
+                        .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape)
+                )
             }
         }
     }
@@ -170,7 +176,8 @@ private fun PreviewPageContent() {
     )
     PageContent(
         pagesCount = 1,
-        page = page,
+        currentPage = 0,
+        pages = listOf(page),
         onPageChange = {},
     )
 }

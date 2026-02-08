@@ -6,7 +6,11 @@ import com.dsokolov.kidsplayer.domain.PlayerPage
 @Immutable
 data class PlayerScreenState(
     val pagesCount: Int,
-    val pageContent: PlayerPage,
+    val currentPage: Int,
     val currentItemId: Int?,
     val isVerticalScreenOrientation: Boolean,
-)
+    private val playerPages: List<PlayerPage>,
+) {
+    val pages: List<PlayerPage>
+        get() = playerPages.toList()
+}

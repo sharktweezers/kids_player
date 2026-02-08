@@ -10,12 +10,26 @@ object PlayerPaginator {
     private const val COLUMN_COUNT_IN_LANDSCAPE = 6
     private const val PAGE_ITEMS = 12
 
-    fun getPageContent(
+    fun getPages(isVerticalScreenOrientation: Boolean): List<PlayerPage> {
+        val pages = mutableListOf<PlayerPage>()
+
+        for (page in 0 until getPagesCount()) {
+            pages.add(
+                getPage(
+                    pageNumber = page,
+                    isVerticalScreenOrientation = isVerticalScreenOrientation,
+                )
+            )
+        }
+
+        return pages
+    }
+
+    fun getPage(
         pageNumber: Int,
-        isVerticalScreenOrientation: Boolean
+        isVerticalScreenOrientation: Boolean,
     ): PlayerPage {
         val items = mutableListOf<PlayableItem>()
-
         val startIndex = pageNumber * PAGE_ITEMS
         val endIndex = min(startIndex + PAGE_ITEMS, PlayableItemsStore.items.size)
 

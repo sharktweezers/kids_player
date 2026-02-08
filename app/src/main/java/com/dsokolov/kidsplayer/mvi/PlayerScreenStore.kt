@@ -7,12 +7,12 @@ class PlayerScreenStore() {
     fun getInitialPlayerScreenState(isVerticalScreenOrientation: Boolean): PlayerScreenState {
         return PlayerScreenState(
             pagesCount = PlayerPaginator.getPagesCount(),
-            pageContent = PlayerPaginator.getPageContent(
-                pageNumber = 0,
-                isVerticalScreenOrientation = isVerticalScreenOrientation
-            ),
+            currentPage = 0,
             currentItemId = null,
             isVerticalScreenOrientation = isVerticalScreenOrientation,
+            playerPages = PlayerPaginator.getPages(
+                isVerticalScreenOrientation = isVerticalScreenOrientation,
+            ),
         )
     }
 }
