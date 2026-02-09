@@ -2,6 +2,7 @@ package com.dsokolov.kidsplayer.di
 
 import com.dsokolov.kidsplayer.injector.di.ViewModelFactoryStore
 import com.dsokolov.kidsplayer.presentation.PlayerViewModel
+import com.dsokolov.kidsplayer.remote.di.ExternalBindsRepositoryModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -9,6 +10,7 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         BindsViewModelModule::class,
+        ExternalBindsRepositoryModule::class,
     ],
     dependencies = [AppDeps::class],
 )

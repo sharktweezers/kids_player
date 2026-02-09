@@ -3,15 +3,16 @@ plugins {
 }
 
 android {
-    namespace = "com.dsokolov.kidsplayer.domain"
+    namespace = "com.dsokolov.kidsplayer.remote"
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":resources"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-
     // dagger2
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

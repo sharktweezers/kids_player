@@ -1,7 +1,6 @@
 package com.dsokolov.kidsplayer.presentation
 
 import androidx.compose.runtime.Immutable
-import com.dsokolov.kidsplayer.domain.PlayerPage
 
 @Immutable
 data class PlayerScreenState(
@@ -9,8 +8,8 @@ data class PlayerScreenState(
     val currentPage: Int,
     val currentItemId: Int?,
     val isVerticalScreenOrientation: Boolean,
-    private val playerPages: List<PlayerPage>,
+    private val playerPages: List<UiPlayerPage>,
 ) {
-    val pages: List<PlayerPage>
+    val pages: List<UiPlayerPage>
         get() = playerPages.toList()
 }

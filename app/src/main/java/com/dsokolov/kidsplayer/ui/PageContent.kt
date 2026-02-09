@@ -25,8 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dsokolov.kidsplayer.resources.R
-import com.dsokolov.kidsplayer.domain.PlayerPage
-import com.dsokolov.kidsplayer.presentation.PlayableItem
+import com.dsokolov.kidsplayer.presentation.UiPlayerPage
+import com.dsokolov.kidsplayer.domain.model.PlayableItem
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_2
 import com.dsokolov.kidsplayer.ui.theme.ImageBorder
@@ -36,7 +36,7 @@ import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 fun PageContent(
     pagesCount: Int,
     currentPage: Int,
-    pages: List<PlayerPage>,
+    pages: List<UiPlayerPage>,
     onPageChange: (Int) -> Unit,
 ) {
     val pagerState = rememberPagerState(
@@ -63,7 +63,7 @@ fun PageContent(
 }
 
 @Composable
-private fun Page(page: PlayerPage) {
+private fun Page(page: UiPlayerPage) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -96,7 +96,7 @@ private fun Page(page: PlayerPage) {
 @Preview
 @Composable
 private fun PreviewPageContent() {
-    val page = PlayerPage(
+    val page = UiPlayerPage(
         items = listOf(
             PlayableItem(
                 id = 0,
@@ -172,7 +172,6 @@ private fun PreviewPageContent() {
             ),
         ),
         columnsCount = 3,
-        pageNumber = 0,
     )
     PageContent(
         pagesCount = 1,

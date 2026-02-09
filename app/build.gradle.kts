@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":utils"))
     implementation(project(":mvi_core"))
     implementation(project(":domain"))
+    implementation(project(":remote"))
     implementation(project(":resources"))
     implementation(platform(libs.androidx.compose.bom))
 

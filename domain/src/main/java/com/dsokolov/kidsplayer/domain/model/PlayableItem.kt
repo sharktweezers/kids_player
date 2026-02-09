@@ -1,4 +1,4 @@
-package com.dsokolov.kidsplayer.presentation
+package com.dsokolov.kidsplayer.domain.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes

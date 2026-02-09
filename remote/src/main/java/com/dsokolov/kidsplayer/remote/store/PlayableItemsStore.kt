@@ -1,9 +1,12 @@
-package com.dsokolov.kidsplayer.domain
+package com.dsokolov.kidsplayer.remote.store
 
+import com.dsokolov.kidsplayer.domain.model.PlayableItem
 import com.dsokolov.kidsplayer.resources.R
-import com.dsokolov.kidsplayer.presentation.PlayableItem
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object PlayableItemsStore {
+@Singleton
+class PlayableItemsStore @Inject constructor() {
     val items: List<PlayableItem> = listOf(
         PlayableItem(
             id = 0,
@@ -282,4 +285,5 @@ object PlayableItemsStore {
             audioId = R.raw.pesenka_funtika,
         ),
     )
+        get() = field.toList()
 }
