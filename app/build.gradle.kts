@@ -19,6 +19,8 @@ dependencies {
     implementation(project(":injector"))
     implementation(project(":utils"))
     implementation(project(":mvi_core"))
+    implementation(project(":domain"))
+    implementation(project(":resources"))
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.core.ktx)

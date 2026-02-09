@@ -1,6 +1,6 @@
 package com.dsokolov.kidsplayer.domain
 
-import com.dsokolov.kidsplayer.R
+import com.dsokolov.kidsplayer.resources.R
 import com.dsokolov.kidsplayer.presentation.PlayableItem
 
 object PlayableItemsStore {

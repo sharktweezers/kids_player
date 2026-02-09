@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dsokolov.kidsplayer.R
+import com.dsokolov.kidsplayer.resources.R
 import com.dsokolov.kidsplayer.di.Di
 import com.dsokolov.kidsplayer.presentation.PlayerViewModel
 import com.dsokolov.kidsplayer.ui.theme.KidsPlayerTheme

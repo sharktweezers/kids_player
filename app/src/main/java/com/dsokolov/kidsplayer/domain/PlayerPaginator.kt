@@ -5,7 +5,7 @@ import kotlin.math.min
 import kotlin.math.ceil
 
 object PlayerPaginator {
-    private const val START_POSITION = 0
+    private const val START_PAGE = 0
     private const val COLUMN_COUNT_IN_PORTRAIT = 3
     private const val COLUMN_COUNT_IN_LANDSCAPE = 6
     private const val PAGE_ITEMS = 12
@@ -13,7 +13,7 @@ object PlayerPaginator {
     fun getPages(isVerticalScreenOrientation: Boolean): List<PlayerPage> {
         val pages = mutableListOf<PlayerPage>()
 
-        for (page in 0 until getPagesCount()) {
+        for (page in START_PAGE until getPagesCount()) {
             pages.add(
                 getPage(
                     pageNumber = page,
