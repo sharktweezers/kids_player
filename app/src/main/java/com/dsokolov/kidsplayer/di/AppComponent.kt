@@ -11,6 +11,7 @@ import javax.inject.Singleton
         AppModule::class,
         BindsViewModelModule::class,
         ExternalBindsRepositoryModule::class,
+        PlayerUiModule::class,
     ],
     dependencies = [AppDeps::class],
 )

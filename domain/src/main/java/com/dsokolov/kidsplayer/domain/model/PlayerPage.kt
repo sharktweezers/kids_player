@@ -1,6 +1,6 @@
 package com.dsokolov.kidsplayer.domain.model
 
-class PlayerPage(
+data class PlayerPage(
     val number: Int,
     private val playableItems: List<PlayableItem>,
 ) {

@@ -1,12 +1,13 @@
 package com.dsokolov.kidsplayer.domain.repository
 
 import com.dsokolov.kidsplayer.domain.model.PlayerPage
+import kotlinx.coroutines.flow.Flow
 
 interface PlayerRepository {
 
-    fun getPagesCount(): Int
+    fun getPages(): Flow<List<PlayerPage>>
 
-    fun getPage(pageNumber: Int): PlayerPage
+    fun getCurrentPageNumber(): Flow<Int>
 
-    fun getPages(): List<PlayerPage>
+    fun getCurrentItem(): Flow<Int?>
 }

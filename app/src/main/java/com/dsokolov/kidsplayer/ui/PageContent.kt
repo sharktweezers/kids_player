@@ -25,8 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dsokolov.kidsplayer.resources.R
-import com.dsokolov.kidsplayer.presentation.UiPlayerPage
 import com.dsokolov.kidsplayer.domain.model.PlayableItem
+import com.dsokolov.kidsplayer.domain.model.PlayerPage
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_2
 import com.dsokolov.kidsplayer.ui.theme.ImageBorder
@@ -36,7 +36,8 @@ import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 fun PageContent(
     pagesCount: Int,
     currentPage: Int,
-    pages: List<UiPlayerPage>,
+    columnsCount: Int,
+    pages: List<PlayerPage>,
     onPageChange: (Int) -> Unit,
 ) {
     val pagerState = rememberPagerState(
@@ -58,18 +59,24 @@ fun PageContent(
                 end = BORDER_GRID_2.dp,
             ),
     ) { pageNumber: Int ->
-        Page(pages[pageNumber])
+        Page(
+            page = pages[pageNumber],
+            columnsCount = columnsCount,
+        )
     }
 }
 
 @Composable
-private fun Page(page: UiPlayerPage) {
+private fun Page(
+    page: PlayerPage,
+    columnsCount: Int,
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(page.columnsCount),
+            columns = GridCells.Fixed(columnsCount),
             modifier = Modifier.wrapContentSize(),
             verticalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
             horizontalArrangement = Arrangement.spacedBy(BORDER_GRID_2.dp),
@@ -96,8 +103,8 @@ private fun Page(page: UiPlayerPage) {
 @Preview
 @Composable
 private fun PreviewPageContent() {
-    val page = UiPlayerPage(
-        items = listOf(
+    val page = PlayerPage(
+        playableItems = listOf(
             PlayableItem(
                 id = 0,
                 markAsPlayed = false,
@@ -171,11 +178,12 @@ private fun PreviewPageContent() {
                 audioId = R.raw.karusel,
             ),
         ),
-        columnsCount = 3,
+        number = 0,
     )
     PageContent(
         pagesCount = 1,
         currentPage = 0,
+        columnsCount = 3,
         pages = listOf(page),
         onPageChange = {},
     )

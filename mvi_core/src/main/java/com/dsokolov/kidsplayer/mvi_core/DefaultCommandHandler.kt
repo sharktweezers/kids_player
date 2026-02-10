@@ -1,4 +1,5 @@
-import com.dsokolov.kidsplayer.mvi_core.CommandHandler
+package com.dsokolov.kidsplayer.mvi_core
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dsokolov.kidsplayer.resources.R
 import com.dsokolov.kidsplayer.di.Di
 import com.dsokolov.kidsplayer.presentation.PlayerViewModel
+import com.dsokolov.kidsplayer.presentation.UiPlayerState
 import com.dsokolov.kidsplayer.ui.theme.KidsPlayerTheme
 import com.dsokolov.kidsplayer.utils.viewmodel.assistedViewModel
 
@@ -38,26 +39,32 @@ fun PlayerScene() {
         Scaffold(
             modifier = Modifier.fillMaxSize()
         ) { innerPadding ->
-            val state by vm.state.collectAsStateWithLifecycle()
+            val screenState by vm.state.collectAsStateWithLifecycle()
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.gradient),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                PageContent(
-                    pagesCount = state.pagesCount,
-                    currentPage = state.currentPage,
-                    pages = state.pages,
-                    onPageChange = vm::onPageChanged
-                )
-                BottomPanel()
+            when (val state = screenState) {
+                is UiPlayerState.UiPlayerLoading -> Unit
+                is UiPlayerState.UiPlayerFill -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.gradient),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        PageContent(
+                            pagesCount = state.pagesCount,
+                            currentPage = state.currentPage,
+                            columnsCount = state.columnsCount,
+                            pages = state.pages,
+                            onPageChange = vm::onPageChanged
+                        )
+                        BottomPanel()
+                    }
+                }
             }
         }
     }
