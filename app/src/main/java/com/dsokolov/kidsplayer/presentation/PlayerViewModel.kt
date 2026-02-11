@@ -58,32 +58,21 @@ class PlayerViewModel @AssistedInject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) {
-
-    }
-
-    fun onPageChanged(pageNumber: Int) {
-
-    }
-
-    /*private val mutableState = MutableStateFlow(
-        playerScreenStore.getInitialPlayerScreenState(isVerticalScreenOrientation)
-    )
-
-    val state = mutableState.asStateFlow()
-
-    fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) {
-        mutableState.update {
-            it.copy(
-                isVerticalScreenOrientation = isVerticalScreenOrientation,
-                playerPages = PlayerPageMapper.domainToUiPage(getPlayerPagesUseCases(), isVerticalScreenOrientation)
+    fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) = launchUnit {
+        uiEvent.emit(
+            PlayerEvent.UiPlayerEvent.ScreenOrientationChanged(
+                isVerticalScreenOrientation
             )
-        }
+        )
     }
 
-    fun onPageChanged(pageNumber: Int) {
-        mutableState.update { it.copy(currentPage = pageNumber,) }
-    }*/
+    fun onPageChanged(pageNumber: Int) = launchUnit {
+        uiEvent.emit(
+            PlayerEvent.UiPlayerEvent.PageChanged(
+                pageNumber
+            )
+        )
+    }
 
     @AssistedFactory
     interface Factory {

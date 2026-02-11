@@ -4,10 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -30,6 +34,8 @@ import com.dsokolov.kidsplayer.domain.model.PlayerPage
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_2
 import com.dsokolov.kidsplayer.ui.theme.ImageBorder
+import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_OFFSET
+import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_SIZE
 import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 
 @Composable
@@ -49,8 +55,7 @@ fun PageContent(
         onPageChange(pagerState.currentPage)
     }
 
-    HorizontalPager(
-        state = pagerState,
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(
@@ -58,11 +63,42 @@ fun PageContent(
                 start = BORDER_GRID_2.dp,
                 end = BORDER_GRID_2.dp,
             ),
-    ) { pageNumber: Int ->
-        Page(
-            page = pages[pageNumber],
-            columnsCount = columnsCount,
-        )
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { pageNumber: Int ->
+            Page(
+                page = pages[pageNumber],
+                columnsCount = columnsCount,
+            )
+        }
+
+        Row(
+            Modifier
+                .height(PAGE_INDICATOR_SIZE.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .offset(y = PAGE_INDICATOR_OFFSET.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            repeat(pagerState.pageCount) { iteration ->
+                Image(
+                    painter = painterResource(
+                        id = if (iteration == currentPage) {
+                            R.drawable.player_page_active
+                        } else {
+                            R.drawable.player_page_inactive
+                        }
+                    ),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(PAGE_INDICATOR_SIZE.dp)
+                )
+            }
+        }
     }
 }
 
