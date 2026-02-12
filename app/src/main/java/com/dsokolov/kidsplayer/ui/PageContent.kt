@@ -2,6 +2,7 @@ package com.dsokolov.kidsplayer.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +39,7 @@ import com.dsokolov.kidsplayer.ui.theme.ImageBorder
 import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_OFFSET
 import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_SIZE
 import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
+import kotlinx.coroutines.launch
 
 @Composable
 fun PageContent(
@@ -46,6 +49,8 @@ fun PageContent(
     pages: List<PlayerPage>,
     onPageChange: (Int) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     val pagerState = rememberPagerState(
         initialPage = currentPage,
         pageCount = { pagesCount }
@@ -82,10 +87,10 @@ fun PageContent(
                 .offset(y = PAGE_INDICATOR_OFFSET.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            repeat(pagerState.pageCount) { iteration ->
+            repeat(pagerState.pageCount) { pageNumber ->
                 Image(
                     painter = painterResource(
-                        id = if (iteration == currentPage) {
+                        id = if (pageNumber == currentPage) {
                             R.drawable.player_page_active
                         } else {
                             R.drawable.player_page_inactive
@@ -96,6 +101,11 @@ fun PageContent(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(PAGE_INDICATOR_SIZE.dp)
+                        .clickable(onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(pageNumber)
+                            }
+                        })
                 )
             }
         }
