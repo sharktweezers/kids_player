@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":injector"))
     implementation(project(":utils"))
+    implementation(project(":resources"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
