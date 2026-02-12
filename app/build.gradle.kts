@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":remote"))
     implementation(project(":resources"))
+    implementation(project(":player_service"))
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.core.ktx)
