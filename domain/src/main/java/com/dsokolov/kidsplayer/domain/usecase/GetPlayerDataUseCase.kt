@@ -4,9 +4,8 @@ import com.dsokolov.kidsplayer.domain.model.PlayerData
 import com.dsokolov.kidsplayer.domain.repository.PlayerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
-class GetPlayerDataUseCase @Inject constructor(
+class GetPlayerDataUseCase internal constructor(
     private val playerRepository: PlayerRepository,
 ) {
     operator fun invoke(): Flow<PlayerData> {

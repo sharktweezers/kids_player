@@ -18,4 +18,8 @@ dependencies {
     // dagger2
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
+
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.ui)
 }

@@ -1,6 +1,7 @@
 package com.dsokolov.kidsplayer.di
 
 import com.dsokolov.kidsplayer.injector.AbstractComponentHolder
+import com.dsokolov.kidsplayer.player_service.di.PlayerServiceComponentHolder
 import javax.inject.Inject
 
 object Di : AbstractComponentHolder<AppApi, AppDeps>() {
@@ -22,7 +23,7 @@ object Di : AbstractComponentHolder<AppApi, AppDeps>() {
 
         @Inject
         fun init(
-            // add your features component holders
+            playerServiceComponentHolder: PlayerServiceComponentHolder,
         ) {
             //This fores the component holders to initiate within their dagger modules
         }

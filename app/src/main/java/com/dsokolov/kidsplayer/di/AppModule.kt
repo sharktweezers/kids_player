@@ -8,6 +8,7 @@ import javax.inject.Singleton
 
 @Module
 class AppModule {
+
     @Provides
     @Singleton
     fun provideContext(kidsPlayerApplication: KidsPlayerApplication): Context {
