@@ -3,7 +3,7 @@ package com.dsokolov.kidsplayer.presentation
 import androidx.compose.runtime.Immutable
 import com.dsokolov.kidsplayer.domain.model.PlayerPage
 
-sealed interface UiPlayerState {
+internal sealed interface UiPlayerState {
 
     data object UiPlayerLoading : UiPlayerState
 

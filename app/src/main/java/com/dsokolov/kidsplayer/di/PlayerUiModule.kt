@@ -12,7 +12,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class PlayerUiModule {
+internal class PlayerUiModule {
 
     @Provides
     fun providePlayerUiReducer() = PlayerUiReducer()

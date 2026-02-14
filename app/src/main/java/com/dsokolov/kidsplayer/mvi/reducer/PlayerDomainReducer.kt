@@ -7,7 +7,7 @@ import com.dsokolov.kidsplayer.mvi.state.PlayerScreenState as State
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent.DomainPlayerEvent as DomainEvent
 import com.dsokolov.kidsplayer.mvi.side_effect.PlayerSideEffect as SideEffect
 
-class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, Command>() {
+internal class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, Command>() {
 
     override fun update(
         state: State,
@@ -23,6 +23,10 @@ class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, Command>(
         state: State,
     ): Update<State, SideEffect, Command> {
         updateState { state.copy(playerData = event.playerData) }
+        if (state.playerData?.isPlay == true) {
+            sideEffect { SideEffect.StartPlayerService }
+        }
+
         return buildUpdate(state)
     }
 }

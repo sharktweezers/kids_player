@@ -3,7 +3,7 @@ package com.dsokolov.kidsplayer.mvi.mapper
 import com.dsokolov.kidsplayer.mvi.state.PlayerScreenState
 import com.dsokolov.kidsplayer.presentation.UiPlayerState
 
-class PlayerDomainToUiStateMapper {
+internal class PlayerDomainToUiStateMapper {
     fun map(playerScreenState: PlayerScreenState): UiPlayerState {
         val data = playerScreenState.playerData
 

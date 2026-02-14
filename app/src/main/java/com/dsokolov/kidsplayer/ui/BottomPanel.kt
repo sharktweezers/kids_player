@@ -1,6 +1,7 @@
 package com.dsokolov.kidsplayer.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,10 @@ import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_Y_OFF_SET
 
 @Composable
-fun BottomPanel(isPlay: Boolean) {
+internal fun BottomPanel(
+    isPlay: Boolean,
+    playPauseClicked: () -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -62,7 +66,8 @@ fun BottomPanel(isPlay: Boolean) {
                 painter = painterResource(id = playBtnId),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp),
+                    .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
+                    .clickable(onClick = playPauseClicked),
                 contentScale = ContentScale.Crop,
             )
 
@@ -84,5 +89,8 @@ fun BottomPanel(isPlay: Boolean) {
 @Preview
 @Composable
 private fun BottomPanelPreview() {
-    BottomPanel(false)
+    BottomPanel(
+        false,
+        {},
+    )
 }

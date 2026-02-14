@@ -42,7 +42,7 @@ import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 import kotlinx.coroutines.launch
 
 @Composable
-fun PageContent(
+internal fun PageContent(
     pagesCount: Int,
     currentPage: Int,
     columnsCount: Int,

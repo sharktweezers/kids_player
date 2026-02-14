@@ -8,7 +8,7 @@ import com.dsokolov.kidsplayer.mvi.state.PlayerScreenState as State
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent as Event
 import com.dsokolov.kidsplayer.mvi.side_effect.PlayerSideEffect as SideEffect
 
-class PlayerStoreFactory(
+internal class PlayerStoreFactory(
     private val reducer: PlayerReducer,
     private val commandHandler: PlayerCommandHandler,
 ) {

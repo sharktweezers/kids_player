@@ -8,7 +8,7 @@ import com.dsokolov.kidsplayer.mvi.state.PlayerScreenState as State
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent as Event
 import com.dsokolov.kidsplayer.mvi.side_effect.PlayerSideEffect as SideEffect
 
-class PlayerReducer(
+internal class PlayerReducer(
     private val uiReducer: PlayerUiReducer,
     private val domainReducer: PlayerDomainReducer,
 ) : ReducerDsl<Event, State, SideEffect, Command>() {
@@ -30,6 +30,6 @@ class PlayerReducer(
     }
 
     fun getInitialCommands(): List<Command> {
-        return listOf(Command.GetPlayerData)
+        return emptyList()
     }
 }

@@ -1,4 +1,5 @@
 package com.dsokolov.kidsplayer.mvi.side_effect
 
-sealed interface PlayerSideEffect {
+internal sealed interface PlayerSideEffect {
+    data object StartPlayerService : PlayerSideEffect
 }

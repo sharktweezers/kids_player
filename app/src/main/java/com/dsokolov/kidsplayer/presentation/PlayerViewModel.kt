@@ -12,6 +12,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class PlayerViewModel @AssistedInject constructor(
+internal class PlayerViewModel @AssistedInject constructor(
     @Assisted isVerticalScreenOrientation: Boolean,
     playerStoreFactory: PlayerStoreFactory,
     playerDomainToUiStateMapper: PlayerDomainToUiStateMapper,
@@ -29,7 +30,11 @@ class PlayerViewModel @AssistedInject constructor(
         UiPlayerState.UiPlayerLoading
     )
 
+    private val sideEffectFlow = MutableSharedFlow<PlayerUiSideEffect>()
+
     val state = stateFlow.asStateFlow()
+
+    internal val sideEffect = sideEffectFlow.asSharedFlow()
 
     private val uiEvent = MutableSharedFlow<PlayerEvent.UiPlayerEvent>()
 
@@ -44,8 +49,8 @@ class PlayerViewModel @AssistedInject constructor(
                 }
             },
             actionSideEffect = { mviSideEffect ->
-                //val uiSideEffect = loanCalculatorUiSideEffectMapper.map(mviSideEffect = mviSideEffect)
-                //_sideEffectFlow.emit(uiSideEffect)
+                val uiSideEffect = playerDomainToUiSideEffectMapper.map(mviSideEffect = mviSideEffect)
+                sideEffectFlow.emit(uiSideEffect)
             },
         )
 
@@ -67,11 +72,11 @@ class PlayerViewModel @AssistedInject constructor(
     }
 
     fun onPageChanged(pageNumber: Int) = launchUnit {
-        uiEvent.emit(
-            PlayerEvent.UiPlayerEvent.PageChanged(
-                pageNumber
-            )
-        )
+        uiEvent.emit(PlayerEvent.UiPlayerEvent.PageChanged(pageNumber))
+    }
+
+    fun playPauseClicked() = launchUnit {
+        uiEvent.emit(PlayerEvent.UiPlayerEvent.PlayPauseClicked)
     }
 
     @AssistedFactory

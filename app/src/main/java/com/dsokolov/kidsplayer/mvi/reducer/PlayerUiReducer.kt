@@ -7,7 +7,7 @@ import com.dsokolov.kidsplayer.mvi.state.PlayerScreenState as State
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent.UiPlayerEvent as UiEvent
 import com.dsokolov.kidsplayer.mvi.side_effect.PlayerSideEffect as SideEffect
 
-class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>() {
+internal class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>() {
 
     override fun update(
         state: State,
@@ -16,6 +16,7 @@ class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>() {
         return when (event) {
             is UiEvent.PageChanged -> reducePageChanged(event, state)
             is UiEvent.ScreenOrientationChanged -> reduceScreenOrientation(event, state)
+            is UiEvent.PlayPauseClicked -> reducePlayPauseClicked(state)
         }
     }
 
@@ -39,6 +40,12 @@ class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>() {
     ): Update<State, SideEffect, Command> {
         updateState { state.copy(isVerticalScreenOrientation = event.isVerticalScreenOrientation) }
 
+        return buildUpdate(state)
+    }
+
+    private fun reducePlayPauseClicked(
+        state: State,
+    ): Update<State, SideEffect, Command> {
         return buildUpdate(state)
     }
 }

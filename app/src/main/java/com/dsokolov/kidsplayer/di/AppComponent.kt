@@ -20,7 +20,7 @@ import javax.inject.Singleton
     dependencies = [AppDeps::class],
 )
 @Singleton
-interface AppComponent : AppApi {
+internal interface AppComponent : AppApi {
 
     fun inject(componentManager: Di.ComponentManager)
 

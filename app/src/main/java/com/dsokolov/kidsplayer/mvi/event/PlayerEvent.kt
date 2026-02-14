@@ -2,13 +2,15 @@ package com.dsokolov.kidsplayer.mvi.event
 
 import com.dsokolov.kidsplayer.domain.model.PlayerData
 
-sealed interface PlayerEvent {
+internal sealed interface PlayerEvent {
 
     sealed interface UiPlayerEvent : PlayerEvent {
 
-        class ScreenOrientationChanged(val isVerticalScreenOrientation: Boolean): UiPlayerEvent
+        class ScreenOrientationChanged(val isVerticalScreenOrientation: Boolean) : UiPlayerEvent
 
-        class PageChanged(val pageNumber: Int): UiPlayerEvent
+        class PageChanged(val pageNumber: Int) : UiPlayerEvent
+
+        data object PlayPauseClicked : UiPlayerEvent
     }
 
     sealed interface DomainPlayerEvent : PlayerEvent {
