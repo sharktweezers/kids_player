@@ -1,6 +1,6 @@
 package com.dsokolov.kidsplayer.mvi.handler
 
-import com.dsokolov.kidsplayer.domain.usecase.GetPlayerDataUseCase
+import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.mvi_core.DefaultCommandHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,7 +12,7 @@ import com.dsokolov.kidsplayer.mvi.command.PlayerCommand as Command
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PlayerCommandHandler(
-    private val getPlayerDataUseCase: GetPlayerDataUseCase
+    private val playerInteractor: PlayerInteractor
 ) : DefaultCommandHandler<Event, Command>() {
 
     override fun handleCommand(command: Command): Flow<Event> {
@@ -22,7 +22,8 @@ class PlayerCommandHandler(
     }
 
     private fun getPlayerData(): Flow<Event> {
-        return getPlayerDataUseCase()
+        return playerInteractor
+            .getPlayerDataFlow()
             .map(Event::PlayerDataEvent)
             .flowOn(Dispatchers.IO)
     }

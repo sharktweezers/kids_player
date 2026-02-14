@@ -9,6 +9,7 @@ sealed interface UiPlayerState {
 
     @Immutable
     data class UiPlayerFill(
+        val isPlay: Boolean,
         val pagesCount: Int,
         val currentPage: Int,
         val pages: List<PlayerPage>,

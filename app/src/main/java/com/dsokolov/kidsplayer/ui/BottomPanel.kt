@@ -23,7 +23,7 @@ import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_Y_OFF_SET
 
 @Composable
-fun BottomPanel() {
+fun BottomPanel(isPlay: Boolean) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -52,8 +52,14 @@ fun BottomPanel() {
 
             Spacer(modifier = Modifier.width(BORDER_GRID_1_5.dp))
 
+            val playBtnId = if (isPlay) {
+                R.drawable.pause
+            } else {
+                R.drawable.play
+            }
+
             Image(
-                painter = painterResource(id = R.drawable.play),
+                painter = painterResource(id = playBtnId),
                 contentDescription = null,
                 modifier = Modifier
                     .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp),
@@ -78,5 +84,5 @@ fun BottomPanel() {
 @Preview
 @Composable
 private fun BottomPanelPreview() {
-    BottomPanel()
+    BottomPanel(false)
 }

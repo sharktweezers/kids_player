@@ -1,6 +1,6 @@
 package com.dsokolov.kidsplayer.di
 
-import com.dsokolov.kidsplayer.domain.usecase.GetPlayerDataUseCase
+import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.mvi.factory.PlayerStoreFactory
 import com.dsokolov.kidsplayer.mvi.handler.PlayerCommandHandler
 import com.dsokolov.kidsplayer.mvi.mapper.PlayerDomainToUiSideEffectMapper
@@ -28,8 +28,8 @@ class PlayerUiModule {
 
     @Provides
     fun providePlayerCommandHandler(
-        getPlayerDataUseCase: GetPlayerDataUseCase
-    ) = PlayerCommandHandler(getPlayerDataUseCase = getPlayerDataUseCase)
+        playerInteractor: PlayerInteractor
+    ) = PlayerCommandHandler(playerInteractor = playerInteractor)
 
     @Provides
     fun providePlayerStoreFactory(

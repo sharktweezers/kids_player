@@ -62,7 +62,7 @@ fun PlayerScene() {
                             pages = state.pages,
                             onPageChange = vm::onPageChanged
                         )
-                        BottomPanel()
+                        BottomPanel(state.isPlay)
                     }
                 }
             }
