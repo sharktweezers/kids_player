@@ -1,30 +1,48 @@
 package com.dsokolov.kidsplayer.mvi.handler
 
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
-import com.dsokolov.kidsplayer.mvi_core.DefaultCommandHandler
+import com.dsokolov.kidsplayer.mvi_core.CommandHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent.DomainPlayerEvent as Event
 import com.dsokolov.kidsplayer.mvi.command.PlayerCommand as Command
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PlayerCommandHandler(
     private val playerInteractor: PlayerInteractor
-) : DefaultCommandHandler<Event, Command>() {
+) : CommandHandler<Event, Command> {
 
-    override fun handleCommand(command: Command): Flow<Event> {
-        return when (command) {
-            is Command.GetPlayerData -> getPlayerData()
-        }
-    }
+    private val commandSharedFlow = MutableSharedFlow<Command>()
 
-    private fun getPlayerData(): Flow<Event> {
+    /*private fun getPlayerData(): Flow<Event> {
         return playerInteractor
             .getPlayerDataFlow()
             .map(Event::PlayerDataEvent)
             .flowOn(Dispatchers.IO)
+    }*/
+
+    override fun getEventSource(): Flow<Event> {
+        /*val commandsFlow = commandSharedFlow.flatMapMerge { command ->
+            when (command) {
+                Command.GetPlayerData -> getPlayerData()
+            }
+        }*/
+
+        val playerDataFlow = playerInteractor
+            .getPlayerDataFlow()
+            .map(Event::PlayerDataEvent)
+            .flowOn(Dispatchers.IO)
+
+        return listOf(playerDataFlow)
+            .merge()
+    }
+
+    override suspend fun onCommand(command: Command) {
+        commandSharedFlow.emit(command)
     }
 }
