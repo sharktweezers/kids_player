@@ -12,9 +12,23 @@ import android.os.IBinder
 import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import androidx.core.app.NotificationManagerCompat
+import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
+import com.dsokolov.kidsplayer.domain.model.PlayerEvent
+import com.dsokolov.kidsplayer.player_service.di.PlayerServiceComponentHolder
 import com.dsokolov.kidsplayer.resources.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class KidsPlayerService : Service() {
+
+    @Inject
+    lateinit var playerInteractor: PlayerInteractor
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     val notificationManager: NotificationManagerCompat by lazy {
         NotificationManagerCompat.from(
@@ -54,7 +68,15 @@ class KidsPlayerService : Service() {
     }
 
     override fun onCreate() {
+        super.onCreate()
+        PlayerServiceComponentHolder.getComponent().inject(this)
         createNotification()
+    }
+
+    override fun onDestroy() {
+        playerInteractor.onPlayerEventChanged(PlayerEvent.Stop)
+        coroutineScope.coroutineContext.cancelChildren()
+        super.onDestroy()
     }
 
     private fun createNotification() {
@@ -94,6 +116,17 @@ class KidsPlayerService : Service() {
         notificationBuilder.setContent(contentView)
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())
+
+        coroutineScope.launch {
+            playerInteractor.getPlayerDataFlow.collect { data ->
+                if (data.isPlay) {
+                    contentView.setImageViewResource(R.id.play, R.drawable.pause)
+                } else {
+                    contentView.setImageViewResource(R.id.play, R.drawable.play)
+                }
+                startForeground(NOTIFICATION_ID, notificationBuilder.build())
+            }
+        }
     }
 
     private fun createNotificationChannel() {
@@ -111,18 +144,6 @@ class KidsPlayerService : Service() {
         intent.action = action
         return PendingIntent.getService(this, 0, intent, FLAG_UPDATE_CURRENT)
     }
-
-    /*private fun updateNotification() { Заменить на подписку на интерактор
-        if (isPlaying()) {
-            contentView.setImageViewResource(R.id.play, R.drawable.pause)
-            contentView.setOnClickPendingIntent(R.id.play, getPendingSelfIntent(getString(R.string.pause)))
-        } else {
-            contentView.setImageViewResource(R.id.play, R.drawable.play)
-            contentView.setOnClickPendingIntent(R.id.play, getPendingSelfIntent(getString(R.string.play)))
-        }
-
-        startForeground(NOTIFICATION_ID, notificationBuilder.build())
-    }*/
 
     private fun stopService() {
         stopForeground(STOP_FOREGROUND_REMOVE)

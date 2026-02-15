@@ -14,7 +14,7 @@ internal class PlayerReducer(
 ) : ReducerDsl<Event, State, SideEffect, Command>() {
     override fun update(
         state: State,
-        event: Event
+        event: Event,
     ): Update<State, SideEffect, Command> {
         return when (event) {
             is Event.UiPlayerEvent -> uiReducer.update(state, event)

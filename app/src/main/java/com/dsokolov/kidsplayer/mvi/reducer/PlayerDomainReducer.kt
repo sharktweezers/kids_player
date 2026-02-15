@@ -23,7 +23,7 @@ internal class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, 
         state: State,
     ): Update<State, SideEffect, Command> {
         updateState { state.copy(playerData = event.playerData) }
-        if (state.playerData?.isPlay == true) {
+        if (event.playerData.isPlay) {
             sideEffect { SideEffect.StartPlayerService }
         }
 

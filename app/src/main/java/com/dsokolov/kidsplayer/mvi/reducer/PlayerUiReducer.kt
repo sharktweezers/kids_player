@@ -11,7 +11,7 @@ internal class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>
 
     override fun update(
         state: State,
-        event: UiEvent
+        event: UiEvent,
     ): Update<State, SideEffect, Command> {
         return when (event) {
             is UiEvent.PageChanged -> reducePageChanged(event, state)
@@ -46,6 +46,8 @@ internal class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>
     private fun reducePlayPauseClicked(
         state: State,
     ): Update<State, SideEffect, Command> {
+        command { Command.PlayPauseClicked }
+
         return buildUpdate(state)
     }
 }

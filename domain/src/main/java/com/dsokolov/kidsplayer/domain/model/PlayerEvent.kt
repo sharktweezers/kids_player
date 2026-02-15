@@ -1,12 +1,14 @@
 package com.dsokolov.kidsplayer.domain.model
 
-internal data class PlayerEvent(val eventType: PlayerEventType?)
+sealed interface PlayerEvent {
 
-sealed interface PlayerEventType {
+    data object PlayingItemPage : PlayerEvent
 
-    data object PlayBtnClicked : PlayerEventType
+    data object PlayBtnClicked : PlayerEvent
 
-    data class PageChanged(val page: Int) : PlayerEventType
+    data object Stop : PlayerEvent
 
-    data class PlayableItemChanged(val itemId: Int) : PlayerEventType
+    data class PageChanged(val page: Int) : PlayerEvent
+
+    data class PlayableItemChanged(val itemId: Int) : PlayerEvent
 }

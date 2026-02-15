@@ -1,7 +1,7 @@
 package com.dsokolov.kidsplayer.mvi.handler
 
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
-import com.dsokolov.kidsplayer.domain.model.PlayerEventType
+import com.dsokolov.kidsplayer.domain.model.PlayerEvent
 import com.dsokolov.kidsplayer.mvi_core.CommandHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,21 +22,16 @@ internal class PlayerCommandHandler(
 
     private val commandSharedFlow = MutableSharedFlow<Command>()
 
-    private fun playPauseClicked(): Flow<Event> {
-        return flow {
-            playerInteractor.onPlayerEventChanged(eventType = PlayerEventType.PlayBtnClicked)
-        }
-    }
-
     override fun getEventSource(): Flow<Event> {
         val commandsFlow = commandSharedFlow.flatMapMerge { command ->
             when (command) {
                 Command.PlayPauseClicked -> playPauseClicked()
+                Command.PlayingItemPage -> getInitData()
             }
         }
 
         val playerDataFlow = playerInteractor
-            .getPlayerDataFlow()
+            .getPlayerDataFlow
             .map(Event::PlayerDataEvent)
             .flowOn(Dispatchers.IO)
 
@@ -49,5 +44,17 @@ internal class PlayerCommandHandler(
 
     override suspend fun onCommand(command: Command) {
         commandSharedFlow.emit(command)
+    }
+
+    private fun playPauseClicked(): Flow<Event> {
+        return flow {
+            playerInteractor.onPlayerEventChanged(event = PlayerEvent.PlayBtnClicked)
+        }
+    }
+
+    private fun getInitData(): Flow<Event> {
+        return flow {
+            playerInteractor.onPlayerEventChanged(event = PlayerEvent.PlayingItemPage)
+        }
     }
 }

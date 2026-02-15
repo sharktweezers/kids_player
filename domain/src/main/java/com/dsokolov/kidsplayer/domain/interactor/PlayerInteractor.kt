@@ -2,14 +2,10 @@ package com.dsokolov.kidsplayer.domain.interactor
 
 import com.dsokolov.kidsplayer.domain.model.PlayerData
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
-import com.dsokolov.kidsplayer.domain.model.PlayerEventType
 import com.dsokolov.kidsplayer.domain.model.PlayerPage
 import com.dsokolov.kidsplayer.domain.repository.PlayerRepository
-import com.dsokolov.kidsplayer.utils.flow.throttleFirst
-import com.dsokolov.kidsplayer.utils.flow.withLatestFrom
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class PlayerInteractor internal constructor(
@@ -26,36 +22,45 @@ class PlayerInteractor internal constructor(
         )
     )
 
-    private val playerEvent = MutableStateFlow(PlayerEvent(null))
+    val getPlayerDataFlow = playerData.asStateFlow()
 
-    fun getPlayerDataFlow(): Flow<PlayerData> {
-        return playerEvent
-            .throttleFirst(windowDuration = THROTTLE_WINDOW)
-            .withLatestFrom(playerData) { event, data ->
-                when (val type = event.eventType) {
-                    is PlayerEventType.PlayableItemChanged -> {
-                        val pageNumber = getPageNumberByItemId(data.pages, type.itemId)
+    fun onPlayerEventChanged(event: PlayerEvent) {
+        playerData.update { data ->
+            when (event) {
+                is PlayerEvent.PageChanged -> data.copy(currentPageNumber = event.page)
+                is PlayerEvent.PlayBtnClicked -> data.copy(isPlay = data.isPlay.not())
+                is PlayerEvent.PlayableItemChanged -> {
+                    val itemId = event.itemId
+                    val pageNumber = getPageNumberByItemId(data.pages, itemId)
+                    if (pageNumber == null) {
+                        data.copy(currentItemId = itemId)
+                    } else {
+                        data.copy(
+                            currentItemId = itemId,
+                            currentPageNumber = pageNumber,
+                        )
+                    }
+                }
+
+                is PlayerEvent.Stop -> {
+                    data.copy(isPlay = false)
+                }
+
+                is PlayerEvent.PlayingItemPage -> {
+                    val currentItem = data.currentItemId
+                    if (currentItem == null) {
+                        data
+                    } else {
+                        val pageNumber = getPageNumberByItemId(data.pages, currentItem)
                         if (pageNumber == null) {
-                            data.copy(currentItemId = type.itemId)
+                            data
                         } else {
-                            data.copy(
-                                currentItemId = type.itemId,
-                                currentPageNumber = pageNumber,
-                            )
+                            data.copy(currentPageNumber = pageNumber)
                         }
                     }
-                    is PlayerEventType.PageChanged -> data.copy(currentPageNumber = type.page)
-                    is PlayerEventType.PlayBtnClicked -> data.copy(isPlay = data.isPlay.not())
-                    null -> data
                 }
             }
-            .onEach { updatedPlayerData ->
-                playerData.update { updatedPlayerData }
-            }
-    }
-
-    fun onPlayerEventChanged(eventType: PlayerEventType) {
-        playerEvent.update { it.copy(eventType = eventType) }
+        }
     }
 
     private fun getPageNumberByItemId(pages: List<PlayerPage>, itemId: Int): Int? {
