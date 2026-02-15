@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dsokolov.kidsplayer.resources.R
 import com.dsokolov.kidsplayer.di.Di
@@ -29,6 +30,7 @@ import com.dsokolov.kidsplayer.utils.viewmodel.assistedViewModel
 internal fun PlayerScene() {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
+    val action = stringResource(R.string.close)
 
     val vm: PlayerViewModel = assistedViewModel {
         Di.getComponent().getPlayerViewModelFactory().create(
@@ -48,6 +50,12 @@ internal fun PlayerScene() {
                     context.startService(
                         Intent(context, KidsPlayerService::class.java)
                     )
+                }
+
+                PlayerUiSideEffect.StopPlayerService -> {
+                    val intent = Intent(context, KidsPlayerService::class.java)
+                    intent.action = action
+                    context.startService(intent)
                 }
             }
         }
