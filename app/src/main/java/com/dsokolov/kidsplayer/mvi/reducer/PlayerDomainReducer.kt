@@ -25,8 +25,6 @@ internal class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, 
         updateState { state.copy(playerData = event.playerData) }
         if (event.playerData.isPlay) {
             sideEffect { SideEffect.StartPlayerService }
-        } else {
-            sideEffect { SideEffect.StopPlayerService }
         }
 
         return buildUpdate(state)

@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -25,9 +27,11 @@ import com.dsokolov.kidsplayer.presentation.PlayerViewModel
 import com.dsokolov.kidsplayer.presentation.UiPlayerState
 import com.dsokolov.kidsplayer.ui.theme.KidsPlayerTheme
 import com.dsokolov.kidsplayer.utils.viewmodel.assistedViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun PlayerScene() {
+    val coroutineScope = rememberCoroutineScope()
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
     val action = stringResource(R.string.close)
@@ -51,12 +55,24 @@ internal fun PlayerScene() {
                         Intent(context, KidsPlayerService::class.java)
                     )
                 }
+            }
+        }
+    }
 
-                PlayerUiSideEffect.StopPlayerService -> {
-                    val intent = Intent(context, KidsPlayerService::class.java)
-                    intent.action = action
-                    context.startService(intent)
-                }
+    DisposableEffect(Unit) {
+        var isPlay = false
+        val job = coroutineScope.launch {
+            vm.state.collect {
+                isPlay = (it as? UiPlayerState.UiPlayerFill)?.isPlay ?: false
+            }
+        }
+
+        onDispose {
+            job.cancel()
+            if (!isPlay) {
+                val intent = Intent(context, KidsPlayerService::class.java)
+                intent.action = action
+                context.startService(intent)
             }
         }
     }
