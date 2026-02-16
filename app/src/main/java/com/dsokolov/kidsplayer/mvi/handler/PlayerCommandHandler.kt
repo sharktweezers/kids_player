@@ -2,11 +2,13 @@ package com.dsokolov.kidsplayer.mvi.handler
 
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
+import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
 import com.dsokolov.kidsplayer.mvi_core.CommandHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -25,8 +27,8 @@ internal class PlayerCommandHandler(
     override fun getEventSource(): Flow<Event> {
         val commandsFlow = commandSharedFlow.flatMapMerge { command ->
             when (command) {
-                Command.PlayPauseClicked -> playPauseClicked()
-                Command.PlayingItemPage -> getInitData()
+                is Command.PlayPauseClicked -> playPauseClicked()
+                is Command.PageChanged -> pageChanged(command)
             }
         }
 
@@ -35,8 +37,15 @@ internal class PlayerCommandHandler(
             .map(Event::PlayerDataEvent)
             .flowOn(Dispatchers.IO)
 
+        val playerSideEffectFlow = playerInteractor
+            .getPlayerSideEffectFlow
+            .filterIsInstance<PlayerSideEffect.ToPage>()
+            .map { Event.ToPage(it.pageNumber) }
+            .flowOn(Dispatchers.IO)
+
         return listOf(
             playerDataFlow,
+            playerSideEffectFlow,
             commandsFlow,
         )
             .merge()
@@ -48,13 +57,13 @@ internal class PlayerCommandHandler(
 
     private fun playPauseClicked(): Flow<Event> {
         return flow {
-            playerInteractor.onPlayerEventChanged(event = PlayerEvent.PlayBtnClicked)
+            playerInteractor.onPlayerEvent(event = PlayerEvent.PlayPauseBtnClicked)
         }
     }
 
-    private fun getInitData(): Flow<Event> {
+    private fun pageChanged(command: Command.PageChanged): Flow<Event> {
         return flow {
-            playerInteractor.onPlayerEventChanged(event = PlayerEvent.PlayingItemPage)
+            playerInteractor.onPlayerEvent(event = PlayerEvent.PageChanged(command.pageNumber))
         }
     }
 }

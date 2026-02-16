@@ -16,5 +16,7 @@ internal sealed interface PlayerEvent {
     sealed interface DomainPlayerEvent : PlayerEvent {
 
         data class PlayerDataEvent(val playerData: PlayerData) : DomainPlayerEvent
+
+        data class ToPage(val pageNumber: Int) : DomainPlayerEvent
     }
 }

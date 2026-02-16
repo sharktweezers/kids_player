@@ -12,8 +12,10 @@ import android.os.IBinder
 import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import androidx.core.app.NotificationManagerCompat
+import androidx.media3.exoplayer.ExoPlayer
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
+import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
 import com.dsokolov.kidsplayer.player_service.di.PlayerServiceComponentHolder
 import com.dsokolov.kidsplayer.resources.R
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +36,10 @@ class KidsPlayerService : Service() {
         NotificationManagerCompat.from(
             baseContext.applicationContext
         )
+    }
+
+    private val player: ExoPlayer by lazy {
+        ExoPlayer.Builder(baseContext).build()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -71,10 +77,23 @@ class KidsPlayerService : Service() {
         super.onCreate()
         PlayerServiceComponentHolder.getComponent().inject(this)
         createNotification()
+        coroutineScope.launch {
+            playerInteractor
+                .getPlayerSideEffectFlow
+                .collect { sideEffect ->
+                    when (sideEffect) {
+                        is PlayerSideEffect.Stop -> TODO()
+                        is PlayerSideEffect.ToPage -> TODO()
+                        is PlayerSideEffect.PlayMediaId -> TODO()
+                    }
+                }
+        }
     }
 
     override fun onDestroy() {
-        playerInteractor.onPlayerEventChanged(PlayerEvent.Stop)
+        coroutineScope.launch {
+            playerInteractor.onPlayerEvent(PlayerEvent.StopService)
+        }
         coroutineScope.coroutineContext.cancelChildren()
         super.onDestroy()
     }

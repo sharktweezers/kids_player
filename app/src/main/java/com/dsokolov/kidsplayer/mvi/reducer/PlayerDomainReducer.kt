@@ -15,6 +15,7 @@ internal class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, 
     ): Update<State, SideEffect, Command> {
         return when (event) {
             is DomainEvent.PlayerDataEvent -> reducePlayerData(event, state)
+            is DomainEvent.ToPage -> reduceToPage(event, state)
         }
     }
 
@@ -26,6 +27,15 @@ internal class PlayerDomainReducer : ReducerDsl<DomainEvent, State, SideEffect, 
         if (event.playerData.isPlay) {
             sideEffect { SideEffect.StartPlayerService }
         }
+
+        return buildUpdate(state)
+    }
+
+    private fun reduceToPage(
+        event: DomainEvent.ToPage,
+        state: State,
+    ): Update<State, SideEffect, Command> {
+        sideEffect { SideEffect.ToPage(event.pageNumber) }
 
         return buildUpdate(state)
     }

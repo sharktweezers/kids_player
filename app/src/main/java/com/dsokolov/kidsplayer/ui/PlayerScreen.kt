@@ -50,11 +50,13 @@ internal fun PlayerScene() {
     LaunchedEffect(Unit) {
         vm.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                PlayerUiSideEffect.StartPlayerService -> {
+                is PlayerUiSideEffect.StartPlayerService -> {
                     context.startService(
                         Intent(context, KidsPlayerService::class.java)
                     )
                 }
+
+                is PlayerUiSideEffect.ToPage -> TODO()
             }
         }
     }
