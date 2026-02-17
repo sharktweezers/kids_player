@@ -18,10 +18,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,27 +39,17 @@ import com.dsokolov.kidsplayer.ui.theme.ImageBorder
 import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_OFFSET
 import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_SIZE
 import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun PageContent(
-    pagesCount: Int,
     currentPage: Int,
     columnsCount: Int,
     pages: List<PlayerPage>,
-    onPageChange: (Int) -> Unit,
+    pagerState: PagerState,
+    coroutineScope: CoroutineScope,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    val pagerState = rememberPagerState(
-        initialPage = currentPage,
-        pageCount = { pagesCount }
-    )
-
-    LaunchedEffect(pagerState.currentPage) {
-        onPageChange(pagerState.currentPage)
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -227,10 +217,13 @@ private fun PreviewPageContent() {
         number = 0,
     )
     PageContent(
-        pagesCount = 1,
         currentPage = 0,
         columnsCount = 3,
         pages = listOf(page),
-        onPageChange = {},
+        pagerState = rememberPagerState(
+            initialPage = 0,
+            pageCount = { 1 }
+        ),
+        coroutineScope = rememberCoroutineScope()
     )
 }

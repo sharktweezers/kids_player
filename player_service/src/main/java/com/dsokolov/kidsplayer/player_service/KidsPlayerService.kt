@@ -82,16 +82,16 @@ class KidsPlayerService : Service() {
                 .getPlayerSideEffectFlow
                 .collect { sideEffect ->
                     when (sideEffect) {
-                        is PlayerSideEffect.Stop -> TODO()
-                        is PlayerSideEffect.ToPage -> TODO()
-                        is PlayerSideEffect.PlayMediaId -> TODO()
+                        is PlayerSideEffect.Stop -> Unit
+                        is PlayerSideEffect.ToPage -> Unit
+                        is PlayerSideEffect.PlayMediaId -> Unit
                     }
                 }
         }
     }
 
     override fun onDestroy() {
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.Main.immediate) {
             playerInteractor.onPlayerEvent(PlayerEvent.StopService)
         }
         coroutineScope.coroutineContext.cancelChildren()
