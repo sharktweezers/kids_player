@@ -28,7 +28,7 @@ internal class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>
         if (data == null) {
             return Update.nothing()
         } else {
-            updateState { state.copy(playerData = data.copy(currentPageNumber = event.pageNumber)) }
+            command { Command.PageChanged(event.pageNumber) }
         }
 
         return buildUpdate(state)
