@@ -173,12 +173,11 @@ class KidsPlayerService : Service() {
     private fun subscribeOnPlayerSideEffects() {
         coroutineScope.launch {
             playerInteractor
-                .getPlayerSideEffectFlow
+                .serviceSideEffectFlow
                 .onEach { sideEffect ->
                     when (sideEffect) {
-                        is PlayerSideEffect.Stop -> { player.stop() }
-                        is PlayerSideEffect.ToPage -> Unit
-                        is PlayerSideEffect.PlayMediaId -> {
+                        is PlayerSideEffect.PlayerServiceSideEffect.Stop -> { player.stop() }
+                        is PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId -> {
                             val audioId = sideEffect.playableItem.audioId
                             val audioUri =
                                 Uri.Builder()

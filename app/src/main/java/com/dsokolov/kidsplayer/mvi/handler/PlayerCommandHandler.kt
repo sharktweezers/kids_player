@@ -2,13 +2,11 @@ package com.dsokolov.kidsplayer.mvi.handler
 
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
-import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
 import com.dsokolov.kidsplayer.mvi_core.CommandHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -39,8 +37,7 @@ internal class PlayerCommandHandler(
             .flowOn(Dispatchers.IO)
 
         val playerSideEffectFlow = playerInteractor
-            .getPlayerSideEffectFlow
-            .filterIsInstance<PlayerSideEffect.ToPage>()
+            .pageSideEffectFlow
             .map { Event.ToPage(it.pageNumber) }
             .flowOn(Dispatchers.IO)
 

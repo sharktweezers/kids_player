@@ -2,9 +2,12 @@ package com.dsokolov.kidsplayer.domain.model
 
 sealed interface PlayerSideEffect {
 
-    data object Stop : PlayerSideEffect
+    sealed interface PlayerServiceSideEffect : PlayerSideEffect {
+
+        data object Stop : PlayerServiceSideEffect
+
+        data class PlayMediaId(val playableItem: PlayableItem) : PlayerServiceSideEffect
+    }
 
     data class ToPage(val pageNumber: Int) : PlayerSideEffect
-
-    data class PlayMediaId(val playableItem: PlayableItem) : PlayerSideEffect
 }

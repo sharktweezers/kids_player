@@ -7,6 +7,7 @@ import com.dsokolov.kidsplayer.domain.model.PlayerPage
 import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
 import com.dsokolov.kidsplayer.domain.repository.PlayerRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -24,14 +25,23 @@ class PlayerInteractor internal constructor(
 
     private val playerData = MutableStateFlow(getInitialData())
 
-    private val sideEffect = MutableSharedFlow<PlayerSideEffect>(
-        replay = 4,
-        extraBufferCapacity = 4,
+    private val pageSideEffect = MutableSharedFlow<PlayerSideEffect.ToPage>(
+        replay = 1,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    private val serviceSideEffect = MutableSharedFlow<PlayerSideEffect.PlayerServiceSideEffect>(
+        replay = 1,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
     val getPlayerDataFlow = playerData.asStateFlow()
 
-    val getPlayerSideEffectFlow = sideEffect.asSharedFlow()
+    val pageSideEffectFlow = pageSideEffect.asSharedFlow()
+
+    val serviceSideEffectFlow = serviceSideEffect.asSharedFlow()
 
     suspend fun onPlayerEvent(event: PlayerEvent) {
         mutex.withLock {
@@ -91,19 +101,19 @@ class PlayerInteractor internal constructor(
         when {
             isPlay.not() -> {
                 playerData.emit(data.copy(isPlay = isPlay))
-                sideEffect.emit(PlayerSideEffect.Stop)
+                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Stop)
             }
             data.currentItem == null -> {
                 val item = getRandomItem(data.pages)
                 val pageNumber = getPageNumberByItemId(data.pages, item.id)
                 playerData.emit(data.copy(isPlay = isPlay, currentItem = item, currentPageNumber = pageNumber))
-                sideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
-                sideEffect.emit(PlayerSideEffect.PlayMediaId(item))
+                pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
+                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(item))
             }
             else -> {
                 val item = getRandomItem(data.pages)
                 playerData.emit(data.copy(isPlay = isPlay))
-                sideEffect.emit(PlayerSideEffect.PlayMediaId(item))
+                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(item))
             }
         }
     }
@@ -113,7 +123,6 @@ class PlayerInteractor internal constructor(
     }
 
     private suspend fun destroyService(data: PlayerData) {
-        sideEffect.resetReplayCache()
         playerData.emit(data.copy(isPlay = false, isServiceStarted = false))
     }
 
