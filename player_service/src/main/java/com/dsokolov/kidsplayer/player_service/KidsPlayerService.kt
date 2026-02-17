@@ -6,12 +6,15 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.IBinder
 import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import androidx.core.app.NotificationManagerCompat
+import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
@@ -22,6 +25,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -80,19 +86,7 @@ class KidsPlayerService : Service() {
             playerInteractor.onPlayerEvent(PlayerEvent.OnCreateService)
         }
         createNotification()
-        coroutineScope.launch {
-            playerInteractor
-                .getPlayerSideEffectFlow
-                .collect { sideEffect ->
-                    when (sideEffect) {
-                        is PlayerSideEffect.Stop -> Unit
-                        is PlayerSideEffect.ToPage -> Unit
-                        is PlayerSideEffect.PlayMediaId -> {
-                            //sideEffect.playableItem.id
-                        }
-                    }
-                }
-        }
+        subscribeOnPlayerSideEffects()
     }
 
     override fun onDestroy() {
@@ -176,10 +170,40 @@ class KidsPlayerService : Service() {
         stopSelf()
     }
 
+    private fun subscribeOnPlayerSideEffects() {
+        coroutineScope.launch {
+            playerInteractor
+                .getPlayerSideEffectFlow
+                .onEach { sideEffect ->
+                    when (sideEffect) {
+                        is PlayerSideEffect.Stop -> { player.stop() }
+                        is PlayerSideEffect.ToPage -> Unit
+                        is PlayerSideEffect.PlayMediaId -> {
+                            val audioId = sideEffect.playableItem.audioId
+                            val audioUri =
+                                Uri.Builder()
+                                    .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                                    .path(audioId.toString())
+                                    .build()
+                            val mediaItem = MediaItem.fromUri(audioUri)
+
+                            player.setMediaItem(mediaItem)
+                            player.prepare()
+                            player.play()
+                        }
+                    }
+                }
+                .flowOn(Dispatchers.Main)
+                .stateIn(coroutineScope)
+        }
+    }
+
     internal companion object {
 
         const val NOTIFICATION_ID = 101
+
         private const val CHANNEL_ID = "channel_id"
+
         private const val CHANNEL_NAME = "channel_name"
     }
 }

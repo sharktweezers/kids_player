@@ -6,6 +6,7 @@ import com.dsokolov.kidsplayer.domain.model.PlayerEvent
 import com.dsokolov.kidsplayer.domain.model.PlayerPage
 import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
 import com.dsokolov.kidsplayer.domain.repository.PlayerRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.random.Random
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PlayerInteractor internal constructor(
     private val playerRepository: PlayerRepository,
 ) {
@@ -22,7 +24,10 @@ class PlayerInteractor internal constructor(
 
     private val playerData = MutableStateFlow(getInitialData())
 
-    private val sideEffect = MutableSharedFlow<PlayerSideEffect>()
+    private val sideEffect = MutableSharedFlow<PlayerSideEffect>(
+        replay = 4,
+        extraBufferCapacity = 4,
+    )
 
     val getPlayerDataFlow = playerData.asStateFlow()
 
@@ -108,6 +113,7 @@ class PlayerInteractor internal constructor(
     }
 
     private suspend fun destroyService(data: PlayerData) {
+        sideEffect.resetReplayCache()
         playerData.emit(data.copy(isPlay = false, isServiceStarted = false))
     }
 
