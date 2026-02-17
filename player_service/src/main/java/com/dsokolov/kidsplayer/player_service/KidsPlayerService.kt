@@ -76,6 +76,9 @@ class KidsPlayerService : Service() {
     override fun onCreate() {
         super.onCreate()
         PlayerServiceComponentHolder.getComponent().inject(this)
+        coroutineScope.launch(Dispatchers.Main.immediate) {
+            playerInteractor.onPlayerEvent(PlayerEvent.OnCreateService)
+        }
         createNotification()
         coroutineScope.launch {
             playerInteractor
@@ -84,7 +87,9 @@ class KidsPlayerService : Service() {
                     when (sideEffect) {
                         is PlayerSideEffect.Stop -> Unit
                         is PlayerSideEffect.ToPage -> Unit
-                        is PlayerSideEffect.PlayMediaId -> Unit
+                        is PlayerSideEffect.PlayMediaId -> {
+                            //sideEffect.playableItem.id
+                        }
                     }
                 }
         }
@@ -92,9 +97,11 @@ class KidsPlayerService : Service() {
 
     override fun onDestroy() {
         coroutineScope.launch(Dispatchers.Main.immediate) {
-            playerInteractor.onPlayerEvent(PlayerEvent.StopService)
+            playerInteractor.onPlayerEvent(PlayerEvent.OnDestroyService)
         }
         coroutineScope.coroutineContext.cancelChildren()
+        player.stop()
+        player.release()
         super.onDestroy()
     }
 

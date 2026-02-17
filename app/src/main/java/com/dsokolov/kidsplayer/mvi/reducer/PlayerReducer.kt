@@ -30,6 +30,6 @@ internal class PlayerReducer(
     }
 
     fun getInitialCommands(): List<Command> {
-        return emptyList()
+        return listOf(Command.InitUi)
     }
 }

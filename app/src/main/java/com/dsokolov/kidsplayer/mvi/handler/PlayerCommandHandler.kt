@@ -29,6 +29,7 @@ internal class PlayerCommandHandler(
             when (command) {
                 is Command.PlayPauseClicked -> playPauseClicked()
                 is Command.PageChanged -> pageChanged(command)
+                is Command.InitUi -> initUi()
             }
         }
 
@@ -53,6 +54,12 @@ internal class PlayerCommandHandler(
 
     override suspend fun onCommand(command: Command) {
         commandSharedFlow.emit(command)
+    }
+
+    private fun initUi(): Flow<Event> {
+        return flow {
+            playerInteractor.onPlayerEvent(event = PlayerEvent.InitUi)
+        }
     }
 
     private fun playPauseClicked(): Flow<Event> {

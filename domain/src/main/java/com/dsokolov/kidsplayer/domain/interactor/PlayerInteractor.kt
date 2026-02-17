@@ -15,20 +15,12 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.random.Random
 
 class PlayerInteractor internal constructor(
-    playerRepository: PlayerRepository,
+    private val playerRepository: PlayerRepository,
 ) {
 
     private val mutex = Mutex()
 
-    private val playerData = MutableStateFlow(
-        PlayerData(
-            pagesCount = playerRepository.getPagesCount(),
-            currentItem = null,
-            currentPageNumber = 0,
-            isPlay = false,
-            playerPages = playerRepository.getPages(),
-        )
-    )
+    private val playerData = MutableStateFlow(getInitialData())
 
     private val sideEffect = MutableSharedFlow<PlayerSideEffect>()
 
@@ -41,9 +33,11 @@ class PlayerInteractor internal constructor(
             val data = playerData.value
 
             when (event) {
-                is PlayerEvent.PageChanged -> onPageChanged(data, event)
+                is PlayerEvent.OnCreateService -> createService(data)
+                is PlayerEvent.PageChanged -> pageChanged(data, event)
                 is PlayerEvent.PlayPauseBtnClicked -> playOrPauseClicked(data)
-                is PlayerEvent.StopService -> stopService(data)
+                is PlayerEvent.OnDestroyService -> destroyService(data)
+                is PlayerEvent.InitUi -> initUi(data)
             }
         }
         /*playerData.update { data ->
@@ -77,7 +71,13 @@ class PlayerInteractor internal constructor(
         }*/
     }
 
-    private suspend fun onPageChanged(data: PlayerData, event: PlayerEvent.PageChanged) {
+    private suspend fun initUi(data: PlayerData) {
+        if (data.isServiceStarted.not()) {
+            playerData.emit(getInitialData())
+        }
+    }
+
+    private suspend fun pageChanged(data: PlayerData, event: PlayerEvent.PageChanged) {
         playerData.emit(data.copy(currentPageNumber = event.pageNumber))
     }
 
@@ -103,8 +103,12 @@ class PlayerInteractor internal constructor(
         }
     }
 
-    private suspend fun stopService(data: PlayerData) {
-        playerData.emit(data.copy(isPlay = false))
+    private suspend fun createService(data: PlayerData) {
+        playerData.emit(data.copy(isServiceStarted = true))
+    }
+
+    private suspend fun destroyService(data: PlayerData) {
+        playerData.emit(data.copy(isPlay = false, isServiceStarted = false))
     }
 
     private fun getRandomItem(pages: List<PlayerPage>): PlayableItem {
@@ -137,5 +141,16 @@ class PlayerInteractor internal constructor(
         }
 
         return null
+    }
+
+    private fun getInitialData(): PlayerData {
+        return PlayerData(
+            pagesCount = playerRepository.getPagesCount(),
+            currentItem = null,
+            currentPageNumber = 0,
+            isPlay = false,
+            playerPages = playerRepository.getPages(),
+            isServiceStarted = false
+        )
     }
 }

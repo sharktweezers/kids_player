@@ -6,5 +6,9 @@ sealed interface PlayerEvent {
 
     data class PageChanged(val pageNumber: Int) : PlayerEvent
 
-    data object StopService : PlayerEvent
+    data object InitUi : PlayerEvent
+
+    data object OnCreateService : PlayerEvent
+
+    data object OnDestroyService : PlayerEvent
 }
