@@ -14,6 +14,8 @@ import android.os.IBinder
 import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import androidx.core.app.NotificationManagerCompat
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
@@ -45,7 +47,15 @@ class KidsPlayerService : Service() {
     }
 
     private val player: ExoPlayer by lazy {
-        ExoPlayer.Builder(baseContext).build()
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(C.USAGE_MEDIA)
+            .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+            .build()
+
+        ExoPlayer
+            .Builder(baseContext)
+            .setAudioAttributes(audioAttributes, /* handleAudioFocus= */ true)
+            .build()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
