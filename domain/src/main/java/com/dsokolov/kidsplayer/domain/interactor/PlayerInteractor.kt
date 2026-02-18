@@ -53,37 +53,9 @@ class PlayerInteractor internal constructor(
                 is PlayerEvent.PlayPauseBtnClicked -> playOrPauseClicked(data)
                 is PlayerEvent.OnDestroyService -> destroyService(data)
                 is PlayerEvent.InitUi -> initUi(data)
+                is PlayerEvent.RepeatClicked -> repeatClicked(data)
             }
         }
-        /*playerData.update { data ->
-            when (event) {
-                is PlayerEvent.PageChanged -> pageChanged(data, event)
-                is PlayerEvent.PlayBtnClicked -> playOrPauseClicked(data)
-
-                is PlayerEvent.PlayableItemChanged -> {
-                    val itemId = event.itemId
-                    val pageNumber = getPageNumberByItemId(data.pages, itemId)
-                    data.copy(
-                        currentItem = getItemById(data.pages, itemId),
-                        currentPageNumber = pageNumber,
-                    )
-                }
-
-                is PlayerEvent.Stop -> {
-                    data.copy(isPlay = false)
-                }
-
-                is PlayerEvent.PlayingItemPage -> {
-                    val currentItem = data.currentItem
-                    if (currentItem == null) {
-                        data
-                    } else {
-                        val pageNumber = getPageNumberByItemId(data.pages, currentItem.id)
-                        data.copy(currentPageNumber = pageNumber)
-                    }
-                }
-            }
-        }*/
     }
 
     private suspend fun initUi(data: PlayerData) {
@@ -92,7 +64,9 @@ class PlayerInteractor internal constructor(
         } else {
             data.currentItem?.let { currentItem ->
                 val pageNumber = getPageNumberByItemId(data.pages, currentItem.id)
-                playerData.emit(data.copy(currentPageNumber = pageNumber))
+                if (pageNumber != data.currentPageNumber) {
+                    playerData.emit(data.copy(currentPageNumber = pageNumber))
+                }
                 pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
             }
         }
@@ -100,6 +74,21 @@ class PlayerInteractor internal constructor(
 
     private suspend fun pageChanged(data: PlayerData, event: PlayerEvent.PageChanged) {
         playerData.emit(data.copy(currentPageNumber = event.pageNumber))
+    }
+
+    private suspend fun repeatClicked(data: PlayerData) {
+        if (data.currentItem != null) {
+            val pageNumber = getPageNumberByItemId(data.pages, data.currentItem.id)
+            playerData.emit(data.copy(currentPageNumber = pageNumber, isPlay = true))
+            pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
+            serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Repeat(data.currentItem))
+        } else {
+            val item = getRandomItem(data.pages)
+            val pageNumber = getPageNumberByItemId(data.pages, item.id)
+            playerData.emit(data.copy(isPlay = true, currentItem = item, currentPageNumber = pageNumber))
+            pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
+            serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(item))
+        }
     }
 
     private suspend fun playOrPauseClicked(data: PlayerData) {

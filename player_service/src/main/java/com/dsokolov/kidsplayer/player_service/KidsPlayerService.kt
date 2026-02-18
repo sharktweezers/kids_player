@@ -19,6 +19,7 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
+import com.dsokolov.kidsplayer.domain.model.PlayableItem
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
 import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
 import com.dsokolov.kidsplayer.player_service.di.PlayerServiceComponentHolder
@@ -66,7 +67,9 @@ class KidsPlayerService : Service() {
         intent?.action?.let { action ->
             when (action) {
                 getString(R.string.repeat) -> {
-
+                    coroutineScope.launch {
+                        playerInteractor.onPlayerEvent(PlayerEvent.RepeatClicked)
+                    }
                 }
 
                 getString(R.string.play) -> {
@@ -181,14 +184,16 @@ class KidsPlayerService : Service() {
                 .onEach { sideEffect ->
                     when (sideEffect) {
                         is PlayerSideEffect.PlayerServiceSideEffect.Stop -> { player.stop() }
+
+                        is PlayerSideEffect.PlayerServiceSideEffect.Repeat -> {
+                            val mediaItem = sideEffect.playableItem.getMediaItem()
+                            player.setMediaItem(mediaItem)
+                            player.prepare()
+                            player.play()
+                        }
+
                         is PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId -> {
-                            val audioId = sideEffect.playableItem.audioId
-                            val audioUri =
-                                Builder()
-                                    .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                                    .path(audioId.toString())
-                                    .build()
-                            val mediaItem = MediaItem.fromUri(audioUri)
+                            val mediaItem = sideEffect.playableItem.getMediaItem()
 
                             if (mediaItem.mediaId == player.currentMediaItem?.mediaId) {
                                 player.prepare()
@@ -204,6 +209,16 @@ class KidsPlayerService : Service() {
                 .flowOn(Dispatchers.Main)
                 .stateIn(coroutineScope)
         }
+    }
+
+    private fun PlayableItem.getMediaItem(): MediaItem {
+        val audioId = this.audioId
+        val audioUri =
+            Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .path(audioId.toString())
+                .build()
+        return MediaItem.fromUri(audioUri)
     }
 
     internal companion object {

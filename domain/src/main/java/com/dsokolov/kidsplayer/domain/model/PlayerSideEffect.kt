@@ -6,6 +6,8 @@ sealed interface PlayerSideEffect {
 
         data object Stop : PlayerServiceSideEffect
 
+        data class Repeat(val playableItem: PlayableItem) : PlayerServiceSideEffect
+
         data class PlayMediaId(val playableItem: PlayableItem) : PlayerServiceSideEffect
     }
 

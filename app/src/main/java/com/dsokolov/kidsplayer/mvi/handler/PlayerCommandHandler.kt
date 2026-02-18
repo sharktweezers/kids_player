@@ -29,6 +29,7 @@ internal class PlayerCommandHandler(
                 is Command.PlayPauseClicked -> playPauseClicked()
                 is Command.PageChanged -> pageChanged(command)
                 is Command.InitUi -> initUi()
+                is Command.RepeatClicked -> repeatClicked()
             }
         }
 
@@ -73,6 +74,12 @@ internal class PlayerCommandHandler(
     private fun pageChanged(command: Command.PageChanged): Flow<Event> {
         return flow {
             playerInteractor.onPlayerEvent(event = PlayerEvent.PageChanged(command.pageNumber))
+        }
+    }
+
+    private fun repeatClicked(): Flow<Event> {
+        return flow {
+            playerInteractor.onPlayerEvent(event = PlayerEvent.RepeatClicked)
         }
     }
 }

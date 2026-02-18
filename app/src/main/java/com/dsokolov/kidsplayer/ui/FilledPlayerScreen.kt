@@ -59,7 +59,7 @@ internal fun FilledPlayerScreen(
         )
         BottomPanel(
             isPlay = state.isPlay,
-            playPauseClicked = vm::playPauseClicked
+            playerViewModel = vm,
         )
     }
 

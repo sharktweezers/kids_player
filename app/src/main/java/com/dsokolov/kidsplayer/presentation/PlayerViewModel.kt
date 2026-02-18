@@ -75,6 +75,10 @@ internal class PlayerViewModel @AssistedInject constructor(
         uiEvent.emit(PlayerEvent.UiPlayerEvent.PageChanged(pageNumber))
     }
 
+    fun repeatClicked() = launchUnit {
+        uiEvent.emit(PlayerEvent.UiPlayerEvent.RepeatClicked)
+    }
+
     fun playPauseClicked() = launchUnit {
         uiEvent.emit(PlayerEvent.UiPlayerEvent.PlayPauseClicked)
     }

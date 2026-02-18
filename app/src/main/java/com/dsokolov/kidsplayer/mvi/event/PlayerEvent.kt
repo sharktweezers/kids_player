@@ -11,6 +11,8 @@ internal sealed interface PlayerEvent {
         class PageChanged(val pageNumber: Int) : UiPlayerEvent
 
         data object PlayPauseClicked : UiPlayerEvent
+
+        data object RepeatClicked : UiPlayerEvent
     }
 
     sealed interface DomainPlayerEvent : PlayerEvent {

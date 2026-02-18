@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dsokolov.kidsplayer.presentation.PlayerViewModel
 import com.dsokolov.kidsplayer.resources.R
 import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_1_5
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_ITEM_SIDE
@@ -28,7 +28,7 @@ import com.dsokolov.kidsplayer.ui.theme.CONTROLS_Y_OFF_SET
 @Composable
 internal fun BottomPanel(
     isPlay: Boolean,
-    playPauseClicked: () -> Unit,
+    playerViewModel: PlayerViewModel,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -42,7 +42,9 @@ internal fun BottomPanel(
                 painter = painterResource(id = R.drawable.repeat),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp),
+                    .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = playerViewModel::repeatClicked),
                 contentScale = ContentScale.Crop,
             )
 
@@ -60,7 +62,7 @@ internal fun BottomPanel(
                 modifier = Modifier
                     .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
                     .clip(CircleShape)
-                    .clickable(onClick = playPauseClicked),
+                    .clickable(onClick = playerViewModel::playPauseClicked),
                 contentScale = ContentScale.Crop,
             )
 
@@ -77,13 +79,4 @@ internal fun BottomPanel(
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun BottomPanelPreview() {
-    BottomPanel(
-        false,
-        {},
-    )
 }

@@ -7,4 +7,6 @@ internal sealed interface PlayerCommand {
     data class PageChanged(val pageNumber: Int) : PlayerCommand
 
     data object PlayPauseClicked : PlayerCommand
+
+    data object RepeatClicked : PlayerCommand
 }
