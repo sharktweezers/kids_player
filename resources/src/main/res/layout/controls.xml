@@ -38,18 +38,6 @@
         android:contentDescription="@string/default_content_description" />
 
     <ImageButton
-        android:id="@+id/repeat_all"
-        android:layout_width="@dimen/control_btn_width"
-        android:layout_height="@dimen/control_btn_height"
-        android:src="@drawable/repeat_all"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:layout_marginEnd="@dimen/item_control_margin"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/repeat"
-        android:contentDescription="@string/default_content_description" />
-
-    <ImageButton
         android:id="@+id/close"
         android:visibility="gone"
         android:layout_width="@dimen/control_btn_width"

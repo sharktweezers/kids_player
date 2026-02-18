@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent.DomainPlayerEvent as Event
 import com.dsokolov.kidsplayer.mvi.command.PlayerCommand as Command
 
@@ -54,9 +55,13 @@ internal class PlayerCommandHandler(
     }
 
     private fun initUi(): Flow<Event> {
-        return flow {
-            playerInteractor.onPlayerEvent(event = PlayerEvent.InitUi)
-        }
+        return playerInteractor
+            .getPlayerDataFlow
+            .map(Event::PlayerDataEvent)
+            .onStart {
+                playerInteractor.onPlayerEvent(event = PlayerEvent.InitUi)
+            }
+            .flowOn(Dispatchers.IO)
     }
 
     private fun playPauseClicked(): Flow<Event> {

@@ -39,16 +39,6 @@ internal fun BottomPanel(
                 .offset(y = CONTROLS_Y_OFF_SET.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.repeat_all),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.width(BORDER_GRID_1_5.dp))
-
-            Image(
                 painter = painterResource(id = R.drawable.repeat),
                 contentDescription = null,
                 modifier = Modifier

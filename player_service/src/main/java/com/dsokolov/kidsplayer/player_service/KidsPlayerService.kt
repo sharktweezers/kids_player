@@ -65,16 +65,14 @@ class KidsPlayerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.action?.let { action ->
             when (action) {
-                getString(R.string.repeat_all) -> {
-
-                }
-
                 getString(R.string.repeat) -> {
 
                 }
 
                 getString(R.string.play) -> {
-
+                    coroutineScope.launch {
+                        playerInteractor.onPlayerEvent(PlayerEvent.PlayPauseBtnClicked)
+                    }
                 }
 
                 getString(R.string.next) -> {
@@ -132,10 +130,6 @@ class KidsPlayerService : Service() {
         contentView.setOnClickPendingIntent(
             R.id.repeat,
             getPendingSelfIntent(getString(R.string.repeat))
-        )
-        contentView.setOnClickPendingIntent(
-            R.id.repeat_all,
-            getPendingSelfIntent(getString(R.string.repeat_all))
         )
         contentView.setOnClickPendingIntent(
             R.id.close,
@@ -196,14 +190,14 @@ class KidsPlayerService : Service() {
                                     .build()
                             val mediaItem = MediaItem.fromUri(audioUri)
 
-                            player.setMediaItem(mediaItem)
-                            player.prepare()
-                            player.play()
-                        }
-
-                        PlayerSideEffect.PlayerServiceSideEffect.Play -> {
-                            player.prepare()
-                            player.play()
+                            if (mediaItem.mediaId == player.currentMediaItem?.mediaId) {
+                                player.prepare()
+                                player.play()
+                            } else {
+                                player.setMediaItem(mediaItem)
+                                player.prepare()
+                                player.play()
+                            }
                         }
                     }
                 }

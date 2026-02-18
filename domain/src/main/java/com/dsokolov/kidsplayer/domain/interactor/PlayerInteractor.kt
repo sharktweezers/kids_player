@@ -89,6 +89,12 @@ class PlayerInteractor internal constructor(
     private suspend fun initUi(data: PlayerData) {
         if (data.isServiceStarted.not()) {
             playerData.emit(getInitialData())
+        } else {
+            data.currentItem?.let { currentItem ->
+                val pageNumber = getPageNumberByItemId(data.pages, currentItem.id)
+                playerData.emit(data.copy(currentPageNumber = pageNumber))
+                pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
+            }
         }
     }
 
@@ -112,7 +118,7 @@ class PlayerInteractor internal constructor(
             }
             else -> {
                 playerData.emit(data.copy(isPlay = isPlay))
-                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Play)
+                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(data.currentItem))
             }
         }
     }
