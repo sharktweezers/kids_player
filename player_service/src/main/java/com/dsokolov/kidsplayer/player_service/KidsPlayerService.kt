@@ -9,7 +9,7 @@ import android.app.Service
 import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
+import android.net.Uri.*
 import android.os.IBinder
 import android.view.View.VISIBLE
 import android.widget.RemoteViews
@@ -190,13 +190,18 @@ class KidsPlayerService : Service() {
                         is PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId -> {
                             val audioId = sideEffect.playableItem.audioId
                             val audioUri =
-                                Uri.Builder()
+                                Builder()
                                     .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
                                     .path(audioId.toString())
                                     .build()
                             val mediaItem = MediaItem.fromUri(audioUri)
 
                             player.setMediaItem(mediaItem)
+                            player.prepare()
+                            player.play()
+                        }
+
+                        PlayerSideEffect.PlayerServiceSideEffect.Play -> {
                             player.prepare()
                             player.play()
                         }

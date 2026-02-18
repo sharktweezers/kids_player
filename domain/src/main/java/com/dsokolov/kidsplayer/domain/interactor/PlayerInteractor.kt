@@ -111,9 +111,8 @@ class PlayerInteractor internal constructor(
                 serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(item))
             }
             else -> {
-                val item = getRandomItem(data.pages)
                 playerData.emit(data.copy(isPlay = isPlay))
-                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(item))
+                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Play)
             }
         }
     }

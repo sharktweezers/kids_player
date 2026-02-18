@@ -1,5 +1,10 @@
 package com.dsokolov.kidsplayer.ui
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,10 +27,12 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +51,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun PageContent(
+    playingItemId: Int?,
     currentPage: Int,
     columnsCount: Int,
     pages: List<PlayerPage>,
@@ -64,6 +72,7 @@ internal fun PageContent(
             modifier = Modifier.fillMaxSize()
         ) { pageNumber: Int ->
             Page(
+                playingItemId = playingItemId,
                 page = pages[pageNumber],
                 columnsCount = columnsCount,
             )
@@ -104,6 +113,7 @@ internal fun PageContent(
 
 @Composable
 private fun Page(
+    playingItemId: Int?,
     page: PlayerPage,
     columnsCount: Int,
 ) {
@@ -121,16 +131,41 @@ private fun Page(
                 items = page.items,
                 key = { item -> item.id }
             ) { item ->
-                Image(
-                    painter = painterResource(id = item.iconId),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .clip(CircleShape)
-                        .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape)
-                )
+                if (item.id == playingItemId) {
+                    val infiniteTransition = rememberInfiniteTransition()
+
+                    val scale by infiniteTransition.animateFloat(
+                        initialValue = 1f,
+                        targetValue = 0.75f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(1250),
+                            repeatMode = RepeatMode.Reverse,
+                        )
+                    )
+
+                    Image(
+                        painter = painterResource(id = item.iconId),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .scale(scale)
+                            .aspectRatio(1f)
+                            .clip(CircleShape)
+                            .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape),
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = item.iconId),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clip(CircleShape)
+                            .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape),
+                    )
+                }
             }
         }
     }
@@ -217,6 +252,7 @@ private fun PreviewPageContent() {
         number = 0,
     )
     PageContent(
+        playingItemId = null,
         currentPage = 0,
         columnsCount = 3,
         pages = listOf(page),

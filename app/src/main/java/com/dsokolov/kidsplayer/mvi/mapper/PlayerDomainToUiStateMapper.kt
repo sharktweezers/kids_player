@@ -11,6 +11,7 @@ internal class PlayerDomainToUiStateMapper {
             UiPlayerState.UiPlayerLoading
         } else {
             UiPlayerState.UiPlayerFill(
+                currentItemId = data.currentItem?.id,
                 isPlay = data.isPlay,
                 pagesCount = data.pagesCount,
                 currentPage = data.currentPageNumber,

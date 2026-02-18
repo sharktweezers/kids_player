@@ -50,6 +50,7 @@ internal fun FilledPlayerScreen(
             modifier = Modifier.fillMaxSize()
         )
         PageContent(
+            playingItemId = if (state.isPlay) state.currentItemId else null,
             currentPage = state.currentPage,
             columnsCount = state.columnsCount,
             pages = state.pages,
