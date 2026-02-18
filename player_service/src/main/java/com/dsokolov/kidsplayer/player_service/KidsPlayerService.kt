@@ -17,6 +17,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayableItem
@@ -33,7 +34,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.media3.common.Player
 
 class KidsPlayerService : Service() {
 
@@ -67,6 +67,13 @@ class KidsPlayerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.action?.let { action ->
             when (action) {
+                getString(R.string.open_ui) -> {
+                    val pm = baseContext.packageManager
+                    pm.getLaunchIntentForPackage("com.dsokolov.kidsplayer")?.let { intent ->
+                        baseContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    }
+                }
+
                 getString(R.string.repeat) -> {
                     coroutineScope.launch(Dispatchers.Main.immediate) {
                         playerInteractor.onPlayerEvent(PlayerEvent.RepeatClicked)
@@ -134,6 +141,11 @@ class KidsPlayerService : Service() {
                     setVisibility(androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC)
                     setSmallIcon(R.mipmap.ic_launcher)
                 }
+
+        contentView.setOnClickPendingIntent(
+            R.id.open_ui,
+            getPendingSelfIntent(getString(R.string.open_ui))
+        )
 
         contentView.setOnClickPendingIntent(
             R.id.play,

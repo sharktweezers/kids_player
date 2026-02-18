@@ -108,7 +108,9 @@ class PlayerInteractor internal constructor(
                 serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(item))
             }
             else -> {
-                playerData.emit(data.copy(isPlay = isPlay))
+                val pageNumber = getPageNumberByItemId(data.pages, data.currentItem.id)
+                playerData.emit(data.copy(isPlay = isPlay, currentPageNumber = pageNumber))
+                pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
                 serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(data.currentItem))
             }
         }
@@ -130,7 +132,7 @@ class PlayerInteractor internal constructor(
                     serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Repeat(clickedItem))
                 }
             } else {
-                playerData.emit(data.copy(isPlay = true))
+                playerData.emit(data.copy(isPlay = true, currentItem = clickedItem))
                 serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(clickedItem))
             }
         }

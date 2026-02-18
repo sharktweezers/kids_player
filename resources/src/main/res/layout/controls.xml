@@ -4,6 +4,18 @@
     android:layout_height="wrap_content">
 
     <ImageButton
+        android:id="@+id/open_ui"
+        android:layout_width="@dimen/control_btn_width"
+        android:layout_height="@dimen/control_btn_height"
+        android:src="@drawable/open_ui"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="@dimen/item_control_margin"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/default_content_description" />
+
+    <ImageButton
         android:id="@+id/play"
         android:layout_width="@dimen/control_btn_width"
         android:layout_height="@dimen/control_btn_height"
@@ -39,7 +51,6 @@
 
     <ImageButton
         android:id="@+id/close"
-        android:visibility="gone"
         android:layout_width="@dimen/control_btn_width"
         android:layout_height="@dimen/control_btn_height"
         android:src="@drawable/close"
