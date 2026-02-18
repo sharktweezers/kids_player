@@ -71,10 +71,10 @@ internal fun BottomPanel(
             Image(
                 painter = painterResource(id = R.drawable.next),
                 contentDescription = null,
-                modifier = Modifier.size(
-                    width = CONTROLS_ITEM_SIDE.dp,
-                    height = CONTROLS_ITEM_SIDE.dp
-                ),
+                modifier = Modifier
+                    .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = playerViewModel::nextClicked),
                 contentScale = ContentScale.Crop,
             )
         }

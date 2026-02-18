@@ -18,6 +18,8 @@ internal class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>
             is UiEvent.ScreenOrientationChanged -> reduceScreenOrientation(event, state)
             is UiEvent.PlayPauseClicked -> reducePlayPauseClicked(state)
             is UiEvent.RepeatClicked -> reduceRepeatClicked(state)
+            is UiEvent.ItemClicked -> reduceItemClicked(event, state)
+            is UiEvent.NextClicked -> nextClicked(state)
         }
     }
 
@@ -56,6 +58,21 @@ internal class PlayerUiReducer : ReducerDsl<UiEvent, State, SideEffect, Command>
         state: State,
     ): Update<State, SideEffect, Command> {
         command { Command.RepeatClicked }
+
+        return buildUpdate(state)
+    }
+
+    private fun reduceItemClicked(
+        event: UiEvent.ItemClicked,
+        state: State,
+    ): Update<State, SideEffect, Command> {
+        command { Command.ItemClicked(event.itemId) }
+
+        return buildUpdate(state)
+    }
+
+    private fun nextClicked(state: State): Update<State, SideEffect, Command> {
+        command { Command.NextClicked }
 
         return buildUpdate(state)
     }

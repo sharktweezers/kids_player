@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.media3.common.Player
 
 class KidsPlayerService : Service() {
 
@@ -67,19 +68,21 @@ class KidsPlayerService : Service() {
         intent?.action?.let { action ->
             when (action) {
                 getString(R.string.repeat) -> {
-                    coroutineScope.launch {
+                    coroutineScope.launch(Dispatchers.Main.immediate) {
                         playerInteractor.onPlayerEvent(PlayerEvent.RepeatClicked)
                     }
                 }
 
                 getString(R.string.play) -> {
-                    coroutineScope.launch {
+                    coroutineScope.launch(Dispatchers.Main.immediate) {
                         playerInteractor.onPlayerEvent(PlayerEvent.PlayPauseBtnClicked)
                     }
                 }
 
                 getString(R.string.next) -> {
-
+                    coroutineScope.launch(Dispatchers.Main.immediate) {
+                        playerInteractor.onPlayerEvent(PlayerEvent.NextClicked)
+                    }
                 }
 
                 getString(R.string.close) -> {
@@ -96,6 +99,17 @@ class KidsPlayerService : Service() {
         coroutineScope.launch(Dispatchers.Main.immediate) {
             playerInteractor.onPlayerEvent(PlayerEvent.OnCreateService)
         }
+        player.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                super.onPlaybackStateChanged(playbackState)
+                if (playbackState == Player.STATE_ENDED) {
+                    // The entire playlist has finished.
+                    coroutineScope.launch(Dispatchers.Main.immediate) {
+                        playerInteractor.onPlayerEvent(PlayerEvent.NextClicked)
+                    }
+                }
+            }
+        })
         createNotification()
         subscribeOnPlayerSideEffects()
     }

@@ -54,6 +54,8 @@ class PlayerInteractor internal constructor(
                 is PlayerEvent.OnDestroyService -> destroyService(data)
                 is PlayerEvent.InitUi -> initUi(data)
                 is PlayerEvent.RepeatClicked -> repeatClicked(data)
+                is PlayerEvent.ItemClicked -> itemClicked(data, event)
+                is PlayerEvent.NextClicked -> nextClicked(data)
             }
         }
     }
@@ -108,6 +110,28 @@ class PlayerInteractor internal constructor(
             else -> {
                 playerData.emit(data.copy(isPlay = isPlay))
                 serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(data.currentItem))
+            }
+        }
+    }
+
+    private suspend fun nextClicked(data: PlayerData) {
+        val item = getRandomItem(data.pages)
+        val pageNumber = getPageNumberByItemId(data.pages, item.id)
+        playerData.emit(data.copy(isPlay = true, currentItem = item, currentPageNumber = pageNumber))
+        pageSideEffect.emit(PlayerSideEffect.ToPage(pageNumber))
+        serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Repeat(item))
+    }
+
+    private suspend fun itemClicked(data: PlayerData, event: PlayerEvent.ItemClicked) {
+        getItemById(data.pages, event.itemId)?.let { clickedItem ->
+            if (clickedItem == data.currentItem) {
+                if (data.isPlay.not()) {
+                    playerData.emit(data.copy(isPlay = true))
+                    serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.Repeat(clickedItem))
+                }
+            } else {
+                playerData.emit(data.copy(isPlay = true))
+                serviceSideEffect.emit(PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId(clickedItem))
             }
         }
     }

@@ -9,4 +9,8 @@ internal sealed interface PlayerCommand {
     data object PlayPauseClicked : PlayerCommand
 
     data object RepeatClicked : PlayerCommand
+
+    data object NextClicked : PlayerCommand
+
+    data class ItemClicked(val itemId: Int) : PlayerCommand
 }

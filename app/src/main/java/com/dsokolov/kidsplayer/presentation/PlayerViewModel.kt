@@ -83,6 +83,14 @@ internal class PlayerViewModel @AssistedInject constructor(
         uiEvent.emit(PlayerEvent.UiPlayerEvent.PlayPauseClicked)
     }
 
+    fun nextClicked() = launchUnit {
+        uiEvent.emit(PlayerEvent.UiPlayerEvent.NextClicked)
+    }
+
+    fun onItemClick(itemId: Int) = launchUnit {
+        uiEvent.emit(PlayerEvent.UiPlayerEvent.ItemClicked(itemId))
+    }
+
     @AssistedFactory
     interface Factory {
         fun create(isVerticalScreenOrientation: Boolean): PlayerViewModel

@@ -6,6 +6,10 @@ sealed interface PlayerEvent {
 
     data object PlayPauseBtnClicked : PlayerEvent
 
+    data object NextClicked : PlayerEvent
+
+    data class ItemClicked(val itemId: Int) : PlayerEvent
+
     data class PageChanged(val pageNumber: Int) : PlayerEvent
 
     data object InitUi : PlayerEvent

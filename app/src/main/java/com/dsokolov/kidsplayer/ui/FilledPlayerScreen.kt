@@ -56,6 +56,7 @@ internal fun FilledPlayerScreen(
             pages = state.pages,
             pagerState = pagerState,
             coroutineScope = coroutineScope,
+            onItemClick = vm::onItemClick
         )
         BottomPanel(
             isPlay = state.isPlay,

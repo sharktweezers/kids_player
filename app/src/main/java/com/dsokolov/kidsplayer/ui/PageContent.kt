@@ -57,6 +57,7 @@ internal fun PageContent(
     pages: List<PlayerPage>,
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
+    onItemClick: (Int) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -75,6 +76,7 @@ internal fun PageContent(
                 playingItemId = playingItemId,
                 page = pages[pageNumber],
                 columnsCount = columnsCount,
+                onItemClick = onItemClick,
             )
         }
 
@@ -116,6 +118,7 @@ private fun Page(
     playingItemId: Int?,
     page: PlayerPage,
     columnsCount: Int,
+    onItemClick: (Int) -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -152,6 +155,7 @@ private fun Page(
                             .scale(scale)
                             .aspectRatio(1f)
                             .clip(CircleShape)
+                            .clickable(onClick = { onItemClick.invoke(item.id) })
                             .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape),
                     )
                 } else {
@@ -163,6 +167,7 @@ private fun Page(
                             .fillMaxWidth()
                             .aspectRatio(1f)
                             .clip(CircleShape)
+                            .clickable(onClick = { onItemClick.invoke(item.id) })
                             .border(PLAYABLE_ITEM_BORDER.dp, ImageBorder, CircleShape),
                     )
                 }
@@ -260,6 +265,7 @@ private fun PreviewPageContent() {
             initialPage = 0,
             pageCount = { 1 }
         ),
-        coroutineScope = rememberCoroutineScope()
+        coroutineScope = rememberCoroutineScope(),
+        onItemClick = { 0 }
     )
 }
