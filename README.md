@@ -11,4 +11,4 @@
  - Работа плеера через ForegroundService и связкой состояния плеера через единый state в PlayerInteractor
 
 2 Демо видео:
-[![Watch the video](https://github.com/sharktweezers/kids_player/player_scr.png)](https://github.com/sharktweezers/kids_player/player_demo.mp4)
+[![](demo/player_demo.mp4)
