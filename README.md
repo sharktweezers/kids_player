@@ -12,4 +12,4 @@
 
 2 Демо видео:
 
-![Видео](demo/player_demo.mp4)
+![Видео](demo/player_demo.gif)
