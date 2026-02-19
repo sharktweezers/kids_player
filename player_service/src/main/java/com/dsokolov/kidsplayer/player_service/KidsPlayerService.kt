@@ -221,7 +221,7 @@ class KidsPlayerService : Service() {
                         is PlayerSideEffect.PlayerServiceSideEffect.PlayMediaId -> {
                             val mediaItem = sideEffect.playableItem.getMediaItem()
 
-                            if (mediaItem.mediaId == player.currentMediaItem?.mediaId) {
+                            if (mediaItem == player.currentMediaItem) {
                                 player.prepare()
                                 player.play()
                             } else {
