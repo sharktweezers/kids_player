@@ -11,4 +11,5 @@
  - Работа плеера через ForegroundService и связкой состояния плеера через единый state в PlayerInteractor
 
 2 Демо видео:
+![Скриншот](demo/player_scr.png)
 [![](demo/player_demo.mp4)
