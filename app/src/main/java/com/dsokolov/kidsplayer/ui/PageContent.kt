@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,10 @@ import com.dsokolov.kidsplayer.ui.theme.PAGE_INDICATOR_SIZE
 import com.dsokolov.kidsplayer.ui.theme.PLAYABLE_ITEM_BORDER
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+const val HORIZONTAL_PAGER_TAG = "horizontal_pager"
+
+const val PAGE_NUMBER_TAG = "page_number"
 
 @Composable
 internal fun PageContent(
@@ -70,7 +75,9 @@ internal fun PageContent(
     ) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(HORIZONTAL_PAGER_TAG),
         ) { pageNumber: Int ->
             Page(
                 playingItemId = playingItemId,
@@ -121,7 +128,9 @@ private fun Page(
     onItemClick: (Int) -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(PAGE_NUMBER_TAG + page.number),
         contentAlignment = Alignment.Center,
     ) {
         LazyVerticalGrid(
