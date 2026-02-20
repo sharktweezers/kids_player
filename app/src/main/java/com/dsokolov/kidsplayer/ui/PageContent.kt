@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dsokolov.kidsplayer.resources.R
@@ -53,6 +54,8 @@ import kotlinx.coroutines.launch
 const val HORIZONTAL_PAGER_TAG = "horizontal_pager"
 
 const val PAGE_NUMBER_TAG = "page_number"
+
+const val PAGE_INDICATOR_TAG = "page_indicator"
 
 @Composable
 internal fun PageContent(
@@ -96,15 +99,15 @@ internal fun PageContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             repeat(pagerState.pageCount) { pageNumber ->
+                val indicatorDrawableId = if (pageNumber == currentPage) {
+                    R.drawable.player_page_active
+                } else {
+                    R.drawable.player_page_inactive
+                }
+
                 Image(
-                    painter = painterResource(
-                        id = if (pageNumber == currentPage) {
-                            R.drawable.player_page_active
-                        } else {
-                            R.drawable.player_page_inactive
-                        }
-                    ),
-                    contentDescription = null,
+                    painter = painterResource(id = indicatorDrawableId),
+                    contentDescription = indicatorDrawableId.toString(),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .clip(CircleShape)
@@ -114,6 +117,7 @@ internal fun PageContent(
                                 pagerState.animateScrollToPage(pageNumber)
                             }
                         })
+                        .testTag(PAGE_INDICATOR_TAG + pageNumber)
                 )
             }
         }
