@@ -5,11 +5,13 @@ import com.dsokolov.kidsplayer.presentation.PlayerViewModel
 import com.dsokolov.kidsplayer.remote.di.ExternalBindsRepositoryModule
 import com.dsokolov.kidsplayer.domain.di.DomainModule
 import com.dsokolov.kidsplayer.di.internal_modules.InternalModules
+import com.dsokolov.kidsplayer.utils.di.UtilsModule
 import dagger.Component
 import javax.inject.Singleton
 
 @Component(
     modules = [
+        UtilsModule::class,
         AppModule::class,
         InternalModules::class,
         DomainModule::class,

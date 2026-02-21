@@ -1,5 +1,6 @@
 package com.dsokolov.kidsplayer.mvi_core
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -9,14 +10,16 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 
 @OptIn(ExperimentalCoroutinesApi::class)
-public open class DefaultCommandHandler<out Event, in Command> : CommandHandler<Event, Command> {
+public open class DefaultCommandHandler<out Event, in Command>(
+    private val coroutineDispatcher: CoroutineDispatcher
+) : CommandHandler<Event, Command> {
 
     private val commands = MutableSharedFlow<Command>()
 
     final override fun getEventSource(): Flow<Event> {
         return commands
             .flatMapMerge { command -> handleCommand(command) }
-            .flowOn(Dispatchers.Default)
+            .flowOn(coroutineDispatcher)
     }
 
     final override suspend fun onCommand(command: Command) {

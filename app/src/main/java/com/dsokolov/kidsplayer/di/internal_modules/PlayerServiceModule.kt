@@ -4,6 +4,7 @@ import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.player_service.di.PlayerServiceApi
 import com.dsokolov.kidsplayer.player_service.di.PlayerServiceComponentHolder
 import com.dsokolov.kidsplayer.player_service.di.PlayerServiceDeps
+import com.dsokolov.kidsplayer.utils.DispatchersProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -15,10 +16,12 @@ class PlayerServiceModule {
     @Singleton
     fun providePlayerServiceDependencies(
         playerServiceInteractor: PlayerInteractor,
+        dispatchersProvider: DispatchersProvider,
     ): PlayerServiceDeps = object : PlayerServiceDeps {
         override val playerInteractor: PlayerInteractor
             get() = playerServiceInteractor
-
+        override val dispatchersProvider: DispatchersProvider
+            get() = dispatchersProvider
     }
 
     @Singleton

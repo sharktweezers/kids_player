@@ -1,5 +1,7 @@
 package com.dsokolov.kidsplayer.mvi_core
 
+import kotlinx.coroutines.CoroutineDispatcher
+
 /**
  * Фабрика полностью готовой обобщенная логики над стейт-машиной [StateMachine],
  * уже связанной с логикой обработки ее команд [CommandHandler].
@@ -23,22 +25,24 @@ object StoreFactory {
      * @param transitionListener слушатель изменний состояния стейт-машины
      */
     fun <Event, State, SideEffect, Command> createStore(
-            stateUpdater: Reducer<Event, State, SideEffect, Command>,
-            commandHandler: CommandHandler<Event, Command>,
-            initialState: State,
-            initialCommands: List<Command>,
-            transitionListener: TransitionListener<Event, State, SideEffect, Command>? = null
+        coroutineDispatcher: CoroutineDispatcher,
+        stateUpdater: Reducer<Event, State, SideEffect, Command>,
+        commandHandler: CommandHandler<Event, Command>,
+        initialState: State,
+        initialCommands: List<Command>,
+        transitionListener: TransitionListener<Event, State, SideEffect, Command>? = null
     ): Store<Event, State, SideEffect> {
         val stateMachine: StateMachine<Event, State, SideEffect, Command> = StateMachine(
-                stateUpdater,
-                initialState,
+            stateUpdater,
+            initialState,
+            coroutineDispatcher,
         )
 
         return StoreImpl(
-                stateMachine = stateMachine,
-                commandHandler = commandHandler,
-                initialCommands = initialCommands,
-                transitionListener = transitionListener
+            stateMachine = stateMachine,
+            commandHandler = commandHandler,
+            initialCommands = initialCommands,
+            transitionListener = transitionListener
         )
     }
 }

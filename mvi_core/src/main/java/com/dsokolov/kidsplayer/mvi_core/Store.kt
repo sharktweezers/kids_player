@@ -17,7 +17,7 @@ interface Store<in Event, out State, out SideEffect> {
 
     fun start(
             coroutineScope: CoroutineScope,
-            coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,
+            coroutineDispatcher: CoroutineDispatcher,
             actionState: suspend (State) -> Unit,
             actionSideEffect: suspend (SideEffect) -> Unit,
             coroutineExceptionHandler: CoroutineExceptionHandler? = null,

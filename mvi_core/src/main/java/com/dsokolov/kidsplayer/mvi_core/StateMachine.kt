@@ -1,7 +1,6 @@
 package com.dsokolov.kidsplayer.mvi_core
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,7 +27,7 @@ import kotlinx.coroutines.flow.scan
 class StateMachine<Event, out State, out SideEffect, Command>(
     private val stateUpdater: Reducer<Event, State, SideEffect, Command>,
     private val initialState: State,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default
+    private val coroutineDispatcher: CoroutineDispatcher,
 ) {
 
     private val eventSharedFlow = MutableSharedFlow<Event>(extraBufferCapacity = Int.MAX_VALUE)
