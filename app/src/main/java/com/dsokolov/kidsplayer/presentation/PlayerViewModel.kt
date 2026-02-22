@@ -1,12 +1,12 @@
 package com.dsokolov.kidsplayer.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.dsokolov.kidsplayer.injector.test.DispatchersProvider
 import com.dsokolov.kidsplayer.mvi.event.PlayerEvent
 import com.dsokolov.kidsplayer.mvi.factory.PlayerStoreFactory
 import com.dsokolov.kidsplayer.mvi.mapper.PlayerDomainToUiSideEffectMapper
 import com.dsokolov.kidsplayer.mvi.mapper.PlayerDomainToUiStateMapper
 import com.dsokolov.kidsplayer.mvi_core.BaseMviViewModel
-import com.dsokolov.kidsplayer.utils.DispatchersProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -25,7 +25,6 @@ internal class PlayerViewModel @AssistedInject constructor(
     playerStoreFactory: PlayerStoreFactory,
     playerDomainToUiStateMapper: PlayerDomainToUiStateMapper,
     playerDomainToUiSideEffectMapper: PlayerDomainToUiSideEffectMapper,
-    private val dispatchersProvider: DispatchersProvider,
 ) : BaseMviViewModel() {
     private val stateFlow = MutableStateFlow<UiPlayerState>(
         UiPlayerState.UiPlayerLoading
@@ -44,9 +43,9 @@ internal class PlayerViewModel @AssistedInject constructor(
 
         mviStore.start(
             coroutineScope = viewModelScope,
-            coroutineDispatcher = dispatchersProvider.default,
+            coroutineDispatcher = DispatchersProvider.default(),
             actionState = { state ->
-                viewModelScope.launch(dispatchersProvider.immediate) {
+                viewModelScope.launch(DispatchersProvider.immediate()) {
                     stateFlow.emit(playerDomainToUiStateMapper.map(state))
                 }
             },
@@ -61,11 +60,11 @@ internal class PlayerViewModel @AssistedInject constructor(
         )
 
         uiEvents.onEach(mviStore::onEvent)
-            .flowOn(dispatchersProvider.default)
+            .flowOn(DispatchersProvider.default())
             .launchIn(viewModelScope)
     }
 
-    fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) = launchUnit(dispatchersProvider.main) {
+    fun onConfigurationChanged(isVerticalScreenOrientation: Boolean) = launchUnit(DispatchersProvider.main()) {
         uiEvent.emit(
             PlayerEvent.UiPlayerEvent.ScreenOrientationChanged(
                 isVerticalScreenOrientation
@@ -73,23 +72,23 @@ internal class PlayerViewModel @AssistedInject constructor(
         )
     }
 
-    fun onPageChanged(pageNumber: Int) = launchUnit(dispatchersProvider.main) {
+    fun onPageChanged(pageNumber: Int) = launchUnit(DispatchersProvider.main()) {
         uiEvent.emit(PlayerEvent.UiPlayerEvent.PageChanged(pageNumber))
     }
 
-    fun repeatClicked() = launchUnit(dispatchersProvider.main) {
+    fun repeatClicked() = launchUnit(DispatchersProvider.main()) {
         uiEvent.emit(PlayerEvent.UiPlayerEvent.RepeatClicked)
     }
 
-    fun playPauseClicked() = launchUnit(dispatchersProvider.main) {
+    fun playPauseClicked() = launchUnit(DispatchersProvider.main()) {
         uiEvent.emit(PlayerEvent.UiPlayerEvent.PlayPauseClicked)
     }
 
-    fun nextClicked() = launchUnit(dispatchersProvider.main) {
+    fun nextClicked() = launchUnit(DispatchersProvider.main()) {
         uiEvent.emit(PlayerEvent.UiPlayerEvent.NextClicked)
     }
 
-    fun onItemClick(itemId: Int) = launchUnit(dispatchersProvider.main) {
+    fun onItemClick(itemId: Int) = launchUnit(DispatchersProvider.main()) {
         uiEvent.emit(PlayerEvent.UiPlayerEvent.ItemClicked(itemId))
     }
 

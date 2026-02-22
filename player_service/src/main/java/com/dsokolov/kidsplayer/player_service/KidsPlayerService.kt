@@ -23,9 +23,9 @@ import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayableItem
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
 import com.dsokolov.kidsplayer.domain.model.PlayerSideEffect
+import com.dsokolov.kidsplayer.injector.test.DispatchersProvider
 import com.dsokolov.kidsplayer.player_service.di.PlayerServiceComponentHolder
 import com.dsokolov.kidsplayer.resources.R
-import com.dsokolov.kidsplayer.utils.DispatchersProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
@@ -40,11 +40,8 @@ class KidsPlayerService : Service() {
     @Inject
     lateinit var playerInteractor: PlayerInteractor
 
-    @Inject
-    lateinit var dispatchersProvider: DispatchersProvider
-
     private val coroutineScope: CoroutineScope by lazy {
-        CoroutineScope(SupervisorJob() + dispatchersProvider.io)
+        CoroutineScope(SupervisorJob() + DispatchersProvider.io())
     }
 
     val notificationManager: NotificationManagerCompat by lazy {
@@ -80,19 +77,19 @@ class KidsPlayerService : Service() {
                 }
 
                 getString(R.string.repeat) -> {
-                    coroutineScope.launch(dispatchersProvider.immediate) {
+                    coroutineScope.launch(DispatchersProvider.immediate()) {
                         playerInteractor.onPlayerEvent(PlayerEvent.RepeatClicked)
                     }
                 }
 
                 getString(R.string.play) -> {
-                    coroutineScope.launch(dispatchersProvider.immediate) {
+                    coroutineScope.launch(DispatchersProvider.immediate()) {
                         playerInteractor.onPlayerEvent(PlayerEvent.PlayPauseBtnClicked)
                     }
                 }
 
                 getString(R.string.next) -> {
-                    coroutineScope.launch(dispatchersProvider.immediate) {
+                    coroutineScope.launch(DispatchersProvider.immediate()) {
                         playerInteractor.onPlayerEvent(PlayerEvent.NextClicked)
                     }
                 }
@@ -108,7 +105,7 @@ class KidsPlayerService : Service() {
     override fun onCreate() {
         super.onCreate()
         PlayerServiceComponentHolder.getComponent().inject(this)
-        coroutineScope.launch(dispatchersProvider.immediate) {
+        coroutineScope.launch(DispatchersProvider.immediate()) {
             playerInteractor.onPlayerEvent(PlayerEvent.OnCreateService)
         }
         player.addListener(object : Player.Listener {
@@ -116,7 +113,7 @@ class KidsPlayerService : Service() {
                 super.onPlaybackStateChanged(playbackState)
                 if (playbackState == Player.STATE_ENDED) {
                     // The entire playlist has finished.
-                    coroutineScope.launch(dispatchersProvider.immediate) {
+                    coroutineScope.launch(DispatchersProvider.immediate()) {
                         playerInteractor.onPlayerEvent(PlayerEvent.NextClicked)
                     }
                 }
@@ -127,7 +124,7 @@ class KidsPlayerService : Service() {
     }
 
     override fun onDestroy() {
-        coroutineScope.launch(dispatchersProvider.immediate) {
+        coroutineScope.launch(DispatchersProvider.immediate()) {
             playerInteractor.onPlayerEvent(PlayerEvent.OnDestroyService)
         }
         coroutineScope.coroutineContext.cancelChildren()
@@ -237,7 +234,7 @@ class KidsPlayerService : Service() {
                         }
                     }
                 }
-                .flowOn(dispatchersProvider.main)
+                .flowOn(DispatchersProvider.main())
                 .stateIn(coroutineScope)
         }
     }

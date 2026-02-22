@@ -22,4 +22,9 @@ dependencies {
     // dagger2
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

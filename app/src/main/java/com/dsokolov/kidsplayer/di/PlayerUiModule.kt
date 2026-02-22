@@ -8,7 +8,6 @@ import com.dsokolov.kidsplayer.mvi.mapper.PlayerDomainToUiStateMapper
 import com.dsokolov.kidsplayer.mvi.reducer.PlayerDomainReducer
 import com.dsokolov.kidsplayer.mvi.reducer.PlayerReducer
 import com.dsokolov.kidsplayer.mvi.reducer.PlayerUiReducer
-import com.dsokolov.kidsplayer.utils.DispatchersProvider
 import dagger.Module
 import dagger.Provides
 
@@ -30,18 +29,15 @@ internal class PlayerUiModule {
     @Provides
     fun providePlayerCommandHandler(
         playerInteractor: PlayerInteractor,
-        dispatchersProvider: DispatchersProvider,
     ) = PlayerCommandHandler(
         playerInteractor = playerInteractor,
-        dispatchersProvider = dispatchersProvider,
     )
 
     @Provides
     fun providePlayerStoreFactory(
         reducer: PlayerReducer,
         commandHandler: PlayerCommandHandler,
-        dispatchersProvider: DispatchersProvider,
-    ) = PlayerStoreFactory(reducer, commandHandler, dispatchersProvider)
+    ) = PlayerStoreFactory(reducer, commandHandler)
 
     @Provides
     fun providePlayerDomainToUiStateMapper() = PlayerDomainToUiStateMapper()

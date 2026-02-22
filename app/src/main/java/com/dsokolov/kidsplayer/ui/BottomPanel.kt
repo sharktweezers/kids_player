@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.dsokolov.kidsplayer.presentation.PlayerViewModel
@@ -24,6 +25,12 @@ import com.dsokolov.kidsplayer.ui.theme.BORDER_GRID_1_5
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_ITEM_SIDE
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_HEIGHT
 import com.dsokolov.kidsplayer.ui.theme.CONTROLS_Y_OFF_SET
+
+const val BUTTON_REPEAT = "btn_repeat"
+
+const val BUTTON_PLAY_PAUSE = "btn_play_pause"
+
+const val BUTTON_NEXT = "btn_next"
 
 @Composable
 internal fun BottomPanel(
@@ -44,7 +51,8 @@ internal fun BottomPanel(
                 modifier = Modifier
                     .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
                     .clip(CircleShape)
-                    .clickable(onClick = playerViewModel::repeatClicked),
+                    .clickable(onClick = playerViewModel::repeatClicked)
+                    .testTag(BUTTON_REPEAT),
                 contentScale = ContentScale.Crop,
             )
 
@@ -58,11 +66,12 @@ internal fun BottomPanel(
 
             Image(
                 painter = painterResource(id = playBtnId),
-                contentDescription = null,
+                contentDescription = playBtnId.toString(),
                 modifier = Modifier
                     .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
                     .clip(CircleShape)
-                    .clickable(onClick = playerViewModel::playPauseClicked),
+                    .clickable(onClick = playerViewModel::playPauseClicked)
+                    .testTag(BUTTON_PLAY_PAUSE),
                 contentScale = ContentScale.Crop,
             )
 
@@ -74,7 +83,8 @@ internal fun BottomPanel(
                 modifier = Modifier
                     .size(width = CONTROLS_ITEM_SIDE.dp, height = CONTROLS_ITEM_SIDE.dp)
                     .clip(CircleShape)
-                    .clickable(onClick = playerViewModel::nextClicked),
+                    .clickable(onClick = playerViewModel::nextClicked)
+                    .testTag(BUTTON_NEXT),
                 contentScale = ContentScale.Crop,
             )
         }

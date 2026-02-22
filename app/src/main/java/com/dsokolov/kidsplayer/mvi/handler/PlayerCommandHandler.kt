@@ -2,8 +2,8 @@ package com.dsokolov.kidsplayer.mvi.handler
 
 import com.dsokolov.kidsplayer.domain.interactor.PlayerInteractor
 import com.dsokolov.kidsplayer.domain.model.PlayerEvent
+import com.dsokolov.kidsplayer.injector.test.DispatchersProvider
 import com.dsokolov.kidsplayer.mvi_core.CommandHandler
-import com.dsokolov.kidsplayer.utils.DispatchersProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +19,6 @@ import com.dsokolov.kidsplayer.mvi.command.PlayerCommand as Command
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class PlayerCommandHandler(
     private val playerInteractor: PlayerInteractor,
-    private val dispatchersProvider: DispatchersProvider,
 ) : CommandHandler<Event, Command> {
 
     private val commandSharedFlow = MutableSharedFlow<Command>()
@@ -39,12 +38,12 @@ internal class PlayerCommandHandler(
         val playerDataFlow = playerInteractor
             .getPlayerDataFlow
             .map(Event::PlayerDataEvent)
-            .flowOn(dispatchersProvider.io)
+            .flowOn(DispatchersProvider.io())
 
         val playerSideEffectFlow = playerInteractor
             .pageSideEffectFlow
             .map { Event.ToPage(it.pageNumber) }
-            .flowOn(dispatchersProvider.io)
+            .flowOn(DispatchersProvider.io())
 
         return listOf(
             playerDataFlow,
@@ -65,7 +64,7 @@ internal class PlayerCommandHandler(
             .onStart {
                 playerInteractor.onPlayerEvent(event = PlayerEvent.InitUi)
             }
-            .flowOn(dispatchersProvider.io)
+            .flowOn(DispatchersProvider.io())
     }
 
     private fun playPauseClicked(): Flow<Event> {
