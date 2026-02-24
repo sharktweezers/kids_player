@@ -57,7 +57,7 @@ const val PAGE_NUMBER_TAG = "page_number"
 
 const val PAGE_INDICATOR_TAG = "page_indicator"
 
-const val PLAYED_ITEM_TAG = "played_item"
+const val PLAYING_ITEM_TAG = "played_item"
 
 const val ITEM_ID_TAG = "item_id"
 
@@ -165,7 +165,7 @@ private fun Page(
 
                     Image(
                         painter = painterResource(id = item.iconId),
-                        contentDescription = PLAYED_ITEM_TAG,
+                        contentDescription = PLAYING_ITEM_TAG,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()

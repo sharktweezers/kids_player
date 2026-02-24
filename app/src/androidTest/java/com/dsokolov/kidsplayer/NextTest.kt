@@ -7,40 +7,48 @@ import androidx.compose.ui.test.performClick
 import com.dsokolov.kidsplayer.injector.test.DispatchersProvider
 import com.dsokolov.kidsplayer.injector.test.TestOnlyVisible
 import com.dsokolov.kidsplayer.resources.R
+import com.dsokolov.kidsplayer.ui.BUTTON_NEXT
 import com.dsokolov.kidsplayer.ui.BUTTON_PLAY_PAUSE
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class PlayerUiUserActionsTest {
+class NextTest {
 
     @get:Rule
     internal val rules = createAndroidComposeRule<PlayerActivity>()
 
-    private val standardTestDispatcher = StandardTestDispatcher()
+    companion object {
 
-    @OptIn(TestOnlyVisible::class)
-    @Before
-    fun setup() {
-        DispatchersProvider.mockDispatchersHolder(
-            io = standardTestDispatcher,
-            default = standardTestDispatcher,
-            main = Dispatchers.Main,
-            immediate = Dispatchers.Main,
-        )
+        @JvmStatic
+        @BeforeClass
+        @OptIn(TestOnlyVisible::class)
+        fun setupClass() {
+            // Инициализация, которая выполняется 1 раз для всего класса
+            val testDispatcher = UnconfinedTestDispatcher()
+
+            DispatchersProvider.mockDispatchersHolder(
+                io = testDispatcher,
+                default = testDispatcher,
+                main = testDispatcher,
+                immediate = testDispatcher,
+            )
+        }
     }
 
-    @OptIn(TestOnlyVisible::class)
     @Test
-    fun play_pause() = runTest(standardTestDispatcher) {
+    fun next() = runTest {
         rules
-            .onNodeWithTag(BUTTON_PLAY_PAUSE).performClick()
+            .onNodeWithTag(BUTTON_PLAY_PAUSE)
+            .assertContentDescriptionEquals(R.drawable.play.toString())
+
+        rules
+            .onNodeWithTag(BUTTON_NEXT).performClick()
         advanceUntilIdle()
         rules
             .onNodeWithTag(BUTTON_PLAY_PAUSE)
@@ -49,10 +57,10 @@ class PlayerUiUserActionsTest {
         rules
             .onNodeWithTag(BUTTON_PLAY_PAUSE).performClick()
         advanceUntilIdle()
+
         rules
             .onNodeWithTag(BUTTON_PLAY_PAUSE)
             .assertContentDescriptionEquals(R.drawable.play.toString())
-
     }
 }
 
